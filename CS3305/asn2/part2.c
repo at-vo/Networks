@@ -1,7 +1,7 @@
 #include "part2.h"
 
     // looks through file and appropriately assigns queues
-int readFile(char* filename, nqueue** arr){
+int readFile(char* filename, nqueue* arr){
     FILE * fp;
     char str[maxchar];
     // 
@@ -20,43 +20,47 @@ int readFile(char* filename, nqueue** arr){
                 // for queue time quantum
                 if(token[0] == 't' && token[1]=='q'){
                     token = strtok(NULL," ");
-                    arr[i]->tq = atoi(token);
+                    arr[i].tq = atoi(token);
                 }
                 // if process
                 else if(token[0]=='p'){
                     // if queue empty
-                    if (arr[i]->first == NULL && arr[i]->last==NULL){ 
+                    if (arr[i].first == NULL && arr[i].last==NULL){ 
                         // create new process object
                         qnode * temp;
                         temp= (qnode*) malloc(sizeof(qnode));
-                        temp->name = token;
+                        strcpy(temp->name,token);
+
                         // sets first and last of queue to temp
-                        arr[i]->first = temp;
-                        arr[i]->last = temp;
+                        arr[i].first = temp;
+                        arr[i].last = temp;
                         // advances tokenizer to get burst speed
                         token = strtok(NULL," ");
                         temp->burst=atoi(token);
                     }
-                    else{   // queue not empty
+                    // queue not empty
+                    else{   
                         // create new process object
                         qnode * temp;
                         temp = (qnode*) malloc(sizeof(qnode));
-                        temp->name = token;
+                        strcpy(temp->name,token);
                         // sets last for queue to temp 
-                        arr[i]->last->behind =  temp;
-                        arr[i]->last = temp;
+                        arr[i].last->behind = temp;
+                        arr[i].last = temp;
                         // advances tokenizer to get burst speed
                         token = strtok(NULL," ");
                         temp->burst=atoi(token);
                     }
+                // if queue assign number
                 }else if (token[0]=='q'){
-                    // read next and skip
                     token = strtok(NULL," ");
+                    arr[i].num=atoi(token);
                 }
                 token = strtok(NULL," ");
             }
             i++;  // goes to next queue
         }
+    
     }
     fclose(fp);
     return 0;
@@ -77,7 +81,26 @@ int checkfile(char*filename){
     return lines;
 }
 
-int FCFS(nqueue arr){
+    // FCFS algorithm on given queue
+int FCFS(nqueue* arr,int size){
+    char * filename = "cpu_scheduling_output_file.txt";
+    //freopen(filename,"a",stdout);
+    for(int i =0;i<size;i++){
+        printf("Ready Queue %d Applying FCFS Scheduling:\n",arr[i].num);
+        printf("Order of selection by CPU: \n");
+        struct qnode * temp= arr[i].first;
+        while(temp!=NULL){
+            printf("name: %s num=%d\n",temp->name,temp->burst);
+            temp=temp->behind;
+        }
+    }
+}
+
+int SJF(nqueue arr){
+
+}
+
+int RR(nqueue arr){
 
 }
 
@@ -89,16 +112,16 @@ int FCFS(nqueue arr){
 int main(){
     char *filename = "cpu_scheduling_input_file.txt";
     int size = checkfile(filename);
-    nqueue* arr[size];
+    nqueue arr[size];
     // allocate memory for each queue object
     for(int i =0;i<size;i++){
-        arr[i] = (nqueue*) malloc(sizeof(nqueue));
-        arr[i]->first = NULL; arr[i]->last = NULL;
-
+        arr[i].first = NULL;
+        arr[i].last = NULL;
     }
     readFile(filename, arr);
-
+    for(int i=0;i<size;i++){
+        FCFS(arr,size);
+    }
 
 
 }
-
