@@ -1,0 +1,35 @@
+int sort(qnode* L,qnode y, int first,int last){
+    if(first>last){
+        return -1;
+    }else{
+        int mid = (first+last)/2;
+        if(y.burst == L[mid].burst)  {
+            return mid;
+        }else if  (y.burst < L[mid].burst){
+            return sort(L,y,first,mid-1);    
+        }else {
+            return sort(L,y,mid+1,last);
+        }
+    }
+}
+void insertionSort(qnode * a, int n) 
+{ 
+    int i, loc, j, k;
+    qnode selected; 
+  
+    for (i = 1; i < n; ++i) 
+    { 
+        j = i - 1; 
+        selected.burst = a[i].burst; 
+  
+        // find location where selected sould be inseretd 
+        loc = sort(a, selected, 0, j); 
+        // Move all elements after location to create space 
+        while (j >= loc) 
+        { 
+            a[j+1] = a[j]; 
+            j--; 
+        } 
+        a[j+1] = selected; 
+    } 
+} 

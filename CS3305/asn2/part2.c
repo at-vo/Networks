@@ -1,107 +1,176 @@
+/**
+ * Dat Vo
+ * 250983323
+ * scheduling algorithms on given input file queues
+ * */
 #include "part2.h"
 
-    // looks through file and appropriately assigns queues
-int readFile(char* filename, nqueue* arr){
-    FILE * fp;
-    char str[maxchar];
-    // 
-    if ((fp = fopen(filename, "r")) == NULL){
-        printf("Could not open file %s",filename);
-        return 1;
-    }else{
-        // queue counter
-        int i=0;    
-        // gets line in file
-        while(fgets(str,maxchar,fp)!=NULL){
-            char * token = strtok(str," ");
-            // reads token
-            while(token!=NULL){
-                //printf("token: %s\n",token);
-                // for queue time quantum
-                if(token[0] == 't' && token[1]=='q'){
-                    token = strtok(NULL," ");
-                    arr[i].tq = atoi(token);
-                }
-                // if process
-                else if(token[0]=='p'){
-                    // if queue empty
-                    if (arr[i].first == NULL && arr[i].last==NULL){ 
-                        // create new process object
-                        qnode * temp;
-                        temp= (qnode*) malloc(sizeof(qnode));
-                        strcpy(temp->name,token);
-
-                        // sets first and last of queue to temp
-                        arr[i].first = temp;
-                        arr[i].last = temp;
-                        // advances tokenizer to get burst speed
-                        token = strtok(NULL," ");
-                        temp->burst=atoi(token);
-                    }
-                    // queue not empty
-                    else{   
-                        // create new process object
-                        qnode * temp;
-                        temp = (qnode*) malloc(sizeof(qnode));
-                        strcpy(temp->name,token);
-                        // sets last for queue to temp 
-                        arr[i].last->behind = temp;
-                        arr[i].last = temp;
-                        // advances tokenizer to get burst speed
-                        token = strtok(NULL," ");
-                        temp->burst=atoi(token);
-                    }
-                // if queue assign number
-                }else if (token[0]=='q'){
-                    token = strtok(NULL," ");
-                    arr[i].num=atoi(token);
-                }
-                token = strtok(NULL," ");
-            }
-            i++;  // goes to next queue
-        }
-    
-    }
-    fclose(fp);
-    return 0;
-}
-
-    // scans through file once to find number of lines
-int checkfile(char*filename){
-    FILE * fp;
-    int lines = 0;
-    char str[maxchar];
-    if ((fp = fopen(filename, "r")) == NULL){
-        printf("Could not open file %s",filename);
-        return -1;
-    }
-    while(fgets(str,maxchar,fp)!=NULL){
-        lines++;
-    }
-    return lines;
-}
-
     // FCFS algorithm on given queue
-int FCFS(nqueue* arr,int size){
-    char * filename = "cpu_scheduling_output_file.txt";
-    //freopen(filename,"a",stdout);
-    for(int i =0;i<size;i++){
-        printf("Ready Queue %d Applying FCFS Scheduling:\n",arr[i].num);
-        printf("Order of selection by CPU: \n");
-        struct qnode * temp= arr[i].first;
-        while(temp!=NULL){
-            printf("name: %s num=%d\n",temp->name,temp->burst);
-            temp=temp->behind;
+int FCFS(nqueue arr,int size, FILE*wp){
+    fprintf(wp,"Ready Queue %d Applying FCFS Scheduling:\n",arr.num);
+    fprintf(wp,"Order of selection by CPU: \n");
+    qnode * np;
+    TAILQ_FOREACH(np,&arr.head,pointers){
+        fprintf(wp,"%s ",np->name);
+    }
+    // waiting times
+    fprintf(wp,"\n");
+    fprintf(wp,"\nIndividual waiting times for each process: \n");
+    float wait = 0;
+    float waitsum=0;
+    // check and increment wait 
+    TAILQ_FOREACH(np,&arr.head,pointers){
+        fprintf(wp,"%s = %.0f\n",np->name,wait);
+        waitsum+=wait;
+        wait += np->burst;
+    }
+    //avg waiting time
+    wait = waitsum/size;
+    fprintf(wp,"\nAverage waiting time = %.2f\n\n",wait);
+    
+}
+    // SJF algorithm
+int SJF(nqueue arr,int size,FILE *wp){
+    fprintf(wp,"Ready Queue %d Applying SJF Scheduling: \n",arr.num);
+    fprintf(wp,"Order of selection by CPU: \n");
+    nqueue newArr;
+    // size++;
+    char* names[size];
+    int bursts[size];
+    // sort queue based on burst time
+    qnode * np;
+    int p=0;
+    TAILQ_FOREACH(np,&arr.head,pointers){
+        bursts[p] = np->burst;
+        names[p] = np->name;
+        p++;
+    }
+    for (int i = 0; i < size; i++){
+        for (int j = 0; j < size; j++){
+            //Compare array elements
+            if (bursts[j] > bursts[i]) {   // Use temporary variable for storing value
+				int tmp1 = bursts[i];         
+				bursts[i] = bursts[j]; // replace value
+				bursts[j] = tmp1; 
+                // change names same way
+                char* tmp2 = names[i];         
+				names[i] = names[j];            
+				names[j] = tmp2;            
+			}  
+		}
+	}
+    // print order of selection
+    for (int i = 0; i < size; i++){
+        fprintf(wp,"%s ",names[i]);
+
+    }
+    // waiting times same as FCFS
+    fprintf(wp,"\n");
+    fprintf(wp,"\nIndividual waiting times for each process: \n");
+    int wait = 0;
+    float waitsum=0;
+    for (int i = 0; i < size; i++){
+        fprintf(wp,"%s = %d\n",names[i],wait);
+        waitsum+=wait;
+        wait += bursts[i];
+    }
+    //avg waiting time
+    wait = waitsum/size;
+    fprintf(wp,"\nAverage waiting time = %.2f\n\n",wait);
+}
+
+// remove p from process name
+void removep(char* proc){
+    int idxToDel = 0; 
+    memmove(&proc[idxToDel], &proc[idxToDel + 1], strlen(proc) - idxToDel);
+}
+
+    // RR scheduling
+int RR(nqueue arr, int size,FILE *wp){
+    fprintf(wp,"Ready Queue %d Applying RR Scheduling:\n",arr.num);
+    fprintf(wp,"Order of selection by CPU: \n");
+    qnode * np;
+    size+=1;
+    int tq = arr.tq;
+    // add process to queue again if it is greater than tq
+    TAILQ_FOREACH(np,&arr.head,pointers){
+        int tempBurst = np->burst;
+        if((tempBurst-tq)>0){
+            qnode *temp = (qnode*) malloc(sizeof(qnode));
+            temp->burst = np->burst-tq;
+            temp->name = (char*)malloc(sizeof(char));
+            strcpy(temp->name,np->name);
+            TAILQ_INSERT_TAIL(&arr.head,temp,pointers);
+            // printf("q%d:%s\n",arr.num,temp->name);
+
         }
     }
-}
-
-int SJF(nqueue arr){
-
-}
-
-int RR(nqueue arr){
-
+    TAILQ_FOREACH(np,&arr.head,pointers){
+        fprintf(wp,"%s ",np->name);
+    }
+    // turnaround times
+    fprintf(wp,"\n");
+    fprintf(wp,"\nTurnaround times for each process: \n");
+    int finish[size];
+    //create three lists for storing finish and arrival times to their respective process
+    for (int i = 1; i < size; i++)
+    {
+        finish[i] = -1;
+    }
+    int here[size];
+    for (int i = 1; i < size; i++)
+    {
+        here[i] = -1;
+    }
+    int proc[size];
+    float wait = 0;
+    TAILQ_FOREACH(np,&arr.head,pointers){
+        // remove p from process
+        removep(np->name);
+        // convert to number
+        int i = atoi(np->name);
+        // record arrival and process
+        if(here[i]==-1){
+            here[i] = wait;
+            proc[i] = i;
+        }
+        // check increment to wait
+        int gant=np->burst;
+        if ((gant-tq)==0){
+            wait+=tq;
+        }else if((gant-tq)<0){
+            wait+=gant;
+        }else if((gant-tq)>0){
+            wait+=tq;
+        }
+        finish[i]=wait;
+        // printf("q::%d p%d: arr= %d fin = %d\n",arr.num,i,here[i],finish[i]);
+    }
+    //  sort by finish times
+    for (int i = 1; i < size; i++){
+        for (int j = 1; j < size; j++){
+            //Compare array elements
+            if (finish[j] > finish[i]) {   // Use temporary variable for storing value
+				int tmp1 = finish[i];         
+				finish[i] = finish[j]; // replace value
+				finish[j] = tmp1; 
+                // change arrival times same way
+                int tmp2 = here[i];         
+				here[i] = here[j];            
+				here[j] = tmp2; 
+                // change process order same way
+                int tmp3 = proc[i];         
+				proc[i] = proc[j];            
+				proc[j] = tmp3;           
+			}  
+		}
+	}
+    // print turnaround times
+    for (int i = 1; i < size; i++)
+    {
+        int turnaround = finish[i] - here[i];
+        fprintf(wp,"p%d = %d\n",proc[i],turnaround);
+    }
 }
 
 
@@ -111,17 +180,62 @@ int RR(nqueue arr){
      * */
 int main(){
     char *filename = "cpu_scheduling_input_file.txt";
-    int size = checkfile(filename);
-    nqueue arr[size];
-    // allocate memory for each queue object
-    for(int i =0;i<size;i++){
-        arr[i].first = NULL;
-        arr[i].last = NULL;
+    char * fileout = "cpu_scheduling_output_file.txt";
+    FILE * fp, *wp;
+    nqueue arr;
+    char str[maxchar];  //max buffer
+    // check if incorrect file
+    if ((fp = fopen(filename, "r")) == NULL){
+        printf("Could not open file %s",filename);
+        return errno;
     }
-    readFile(filename, arr);
-    for(int i=0;i<size;i++){
-        FCFS(arr,size);
+    wp=fopen(fileout,"w");
+    // gets line in file
+    while(fgets(str,maxchar,fp)!=NULL){
+        int procs=0;  //number of processes
+        TAILQ_INIT(&arr.head);
+        char * token = strtok(str," ");
+        // reads token
+        while(token!=NULL){
+            // for queue time quantum
+            if(token[0] == 't' && token[1]=='q'){
+                token = strtok(NULL," ");
+                arr.tq = atoi(token);
+            }
+            // if process
+            else if(token[0]=='p'){
+                // create new process object
+                qnode * temp;
+                temp = (qnode*) malloc(sizeof(qnode));
+                temp->name = token;
+                // advances tokenizer to get burst speed
+                token = strtok(NULL," ");
+                temp->burst=atoi(token);
+                // sets first and last of queue to temp
+                TAILQ_INSERT_TAIL(&arr.head,temp,pointers);
+                procs++;
+            }
+            // if queue assign number
+            else if (token[0]=='q'){
+                token = strtok(NULL," ");
+                arr.num=atoi(token);
+            }
+            token = strtok(NULL," ");
+        }
+        //call scheduling algorithm on each process
+        FCFS(arr,procs,wp);
+        SJF(arr,procs,wp);
+        RR(arr,procs,wp);
+        // destroy queue
+        while (!TAILQ_EMPTY(&arr.head)) {
+            qnode* n1;
+            n1 = TAILQ_FIRST(&arr.head);
+            TAILQ_REMOVE(&arr.head, n1, pointers);
+            free(n1);
+        }
     }
+    fclose(fp);
+    fclose(wp);
 
-
+    return 0;
 }

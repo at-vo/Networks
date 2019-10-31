@@ -1,6 +1,6 @@
 #ifndef PART2_H
 #define PART2_H
-#define maxchar 100 // maximum buffer
+#define maxchar 256 // maximum buffer
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -9,25 +9,24 @@
 #include <pthread.h>
 #include <string.h>
 #include <ctype.h>
+#include <errno.h>
+#include <sys/queue.h>
 
 typedef struct nqueue{
     int num;
-    struct qnode *first,*last;
     int tq;
+    TAILQ_HEAD(tailhead, qnode) head;
 } nqueue;
 
 typedef struct qnode{
     char *name;
     int burst;
-    struct qnode *behind;
+    TAILQ_ENTRY(qnode) pointers;
 } qnode;
 
-
-int readFile(char* filename, nqueue* arr);
-int checkfile(char*filename);
-int FCFS(nqueue* arr, int size);
-int SJF(nqueue arr);
-int RR(nqueue arr);
+int FCFS(nqueue arr, int size,FILE *wp);
+int SJF(nqueue arr, int size,FILE *wp);
+int RR(nqueue arr, int size,FILE *wp);
 
 
 
