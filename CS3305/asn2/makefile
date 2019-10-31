@@ -1,3 +1,5 @@
+#Dat Vo
+#250983323
 all: part1 part2
 
 part1: part1.c part1.h
