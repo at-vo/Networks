@@ -1,0 +1,49 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             lab1_3, CODE, READONLY
+    2 00000000                 ENTRY
+    3 00000000         
+    4 00000000 E3A00002        MOV              r0,#2       ;Put 2 in register 
+                                                            r0 
+    5 00000004 E3A01003        MOV              r1,#3       ;Put 3 in register 
+                                                            r1 
+    6 00000008 E3A02007        MOV              r2,#7       ;Put 20 in register
+                                                             r2 
+    7 0000000C E3A03002        MOV              r3,#2       ;Put 2 in register 
+                                                            r3 
+    8 00000010 E3A04002        MOV              r4,#2       ;Put 2 in register 
+                                                            r4 
+    9 00000014         
+   10 00000014 E0050493        MUL              r5, r3, r4  ; multiply r3 and r
+                                                            4 store in r5
+   11 00000018 E0455002        SUB              r5, r5, r2  ; subtract r5 from 
+                                                            r2 store in r5
+   12 0000001C E0855001        ADD              r5, r5, r1  ; add r0 and r2 sto
+                                                            re in r7
+   13 00000020 E0855000        ADD              r5, r5, r0  ; add r7 and r1 sto
+                                                            re in r0
+   14 00000024         
+   15 00000024                 END
+Command Line: --debug --xref --bi --apcs=interwork --depend=.\lab1_3.d -o.\lab1
+_3.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include --predefine="__EVAL SET
+A 1" --list=.\lab1_3.lst lab1_3.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+lab1_3 00000000
+
+Symbol: lab1_3
+   Definitions
+      At line 1 in file lab1_3.s
+   Uses
+      None
+Comment: lab1_3 unused
+1 symbol
+332 symbols in table

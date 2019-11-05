@@ -1,0 +1,88 @@
+ public Record successor (Pair k) { // dijon
+    if (this.root.isLeaf()) {
+      return null;
+    } else {
+      Record closeKey = getClosest(k); // the closest key to k (if not k exists)
+      // succOf should not return null, handle it anyways.
+      Node succOf = getNode(closeKey.getKey()); // finds the node of the closeKey (the node to get the successor of).
+
+      if (!succOf.isLeaf() && !succOf.getRight().isLeaf()) {
+        return smallestNode(succOf.getRight()).getRecord();
+      } else {
+        // exp
+        Node parent = succOf.getParent();
+        while (succOf != this.root) {
+          succOf = parent;
+          parent = succOf.getParent();
+        }
+
+        if (succOf == this.root) {
+          return null;
+        } else {
+          return parent.getRecord();
+        }
+      }
+    }
+
+  }
+  public Record smallest() {
+    Node curr = this.root;
+
+    while (!curr.getLeft().isLeaf()) {
+      curr = curr.getLeft();
+    }
+
+    return curr.getRecord();
+  }
+  
+  //jacob
+  
+  public Record successor(Pair k) {
+        Node root = this.root;
+        //inorder(this.root);
+        if(root == null || root.isLeaf())
+            return null;
+
+        else
+        {
+            Node temp = findNode(k);
+            if (temp == null)
+            {
+                Node Root = this.root;
+                while(Root.getRight() != null)
+                {
+                    if(k.compareTo(Root.getData().getKey()) < 0)
+                        Root = Root.getRight();
+                    else 
+                        return getSmallest(Root).getData();
+                }
+
+
+                return null;
+            }
+            if(!temp.isLeaf() && !temp.getRight().isLeaf())
+            {
+                return getSmallest(temp.getRight()).getData();
+
+            }
+            else 
+            {
+                Node Pred = temp.getBefore();
+                while (temp.getData().getKey().compareTo(this.root.getData().getKey()) != 0 && temp.getData().getKey().compareTo(Pred.getRight().getData().getKey())== 0)
+
+                {
+                    temp = Pred;
+                    Pred = temp.getBefore();
+                }
+                if (temp.getData().getKey().compareTo(this.root.getData().getKey()) == 0)
+                    return null;
+                else 
+                    return Pred.getData();
+
+            }
+
+
+        }
+    }
+
+  

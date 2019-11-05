@@ -1,0 +1,211 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             question2, CODE, READONLY
+    2 00000000                 ENTRY
+    3 00000000 E28F5058        ADR              r5, STRING  ; point r5 to begin
+                                                            ning of string
+    4 00000004 E28F606C        ADR              r6, EoS     ; point to end of s
+                                                            tring (EoS) 
+    5 00000008         
+    6 00000008         ; main control loop
+    7 00000008 E2566001 
+                       LOOP    SUBS             r6, r6, #1  ; decrement EoS poi
+                                                            nter to get last ch
+                                                            aracter
+    8 0000000C E1560005        CMP              r6, r5      ; Check if ending p
+                                                            ointer and beginnin
+                                                            g pointer cross; 
+    9 00000010 DA000011        BLE              PALIN       ; if it does then i
+                                                            t's a palindrome, t
+                                                            hen break loop and 
+                                                            call Palin
+   10 00000014         
+   11 00000014         ; Load initial characters
+   12 00000014 E5D57000 
+                       Opoint  LDRB             r7, [r5]    ; load r5 (beginnin
+                                                            g) character into r
+                                                            7 register
+   13 00000018 E5D68000        LDRB             r8, [r6]    ; load r6 (end) cha
+                                                            racter into r8 regi
+                                                            ster 
+   14 0000001C         
+   15 0000001C         ; check pointer at beginning of string
+   16 0000001C E3877020        ORR              r7, r7, #0x0020 
+                                                            ; force lower case
+   17 00000020 E3570061        CMP              r7, #'a'    ; Are we in the ran
+                                                            ge of the lowercase
+                                                            ?
+   18 00000024 A277907A        RSBGES           r9, r7, #'z' ; If >= 'a', ;then
+                                                             check with 'z';   
+                                                              and update the fl
+                                                            ags
+   19 00000028 BA000007        BLT              movB        ; go to movB to inc
+                                                            rement beginning po
+                                                            inter
+   20 0000002C         
+   21 0000002C         ; check pointer at end of string
+   22 0000002C E3888020        ORR              r8, r8, #0x0020 
+                                                            ;force lower case
+   23 00000030 E3580061        CMP              r8, #'a'    ;Are we in the rang
+                                                            e of the lowercase?
+                                                            
+   24 00000034 A278A07A        RSBGES           r10, r8, #'z' ;If >= 'A', ;then
+                                                             check with 'Z';   
+                                                              and update the fl
+                                                            ags
+   25 00000038 BAFFFFF2        BLT              LOOP        ; go to LOOP to dec
+                                                            rement Ending point
+                                                            er and recheck the 
+                                                            loaded bytes 
+   26 0000003C         
+   27 0000003C         ; compare pointer characters
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   28 0000003C E1570008 
+                       Compare CMP              r7, r8      ; check if r7 - r8 
+                                                            = 0
+   29 00000040 1A000003        BNE              NOT         ; if they are not t
+                                                            hen go to NOT opera
+                                                            tion and break loop
+                                                            
+   30 00000044 E2855001        ADD              r5, r5, #1  ; else, point begin
+                                                            ning pointer to nex
+                                                            t character
+   31 00000048 EAFFFFEE        B                LOOP
+   32 0000004C         
+   33 0000004C         ; skip special characters
+   34 0000004C E2855001 
+                       movB    ADD              r5, r5, #1  ; move begin pointe
+                                                            r right
+   35 00000050 EAFFFFEF        B                Opoint      ; go to Beginning s
+                                                            tring comparison
+   36 00000054         
+   37 00000054         ; operations
+   38 00000054 E3A00002 
+                       NOT     MOV              r0, #2      ; if not palindrome
+                                                            , assign value 2 to
+                                                             r0
+   39 00000058 EAFFFFFE 
+                       QUIT    B                QUIT        ; quits after findi
+                                                            ng it not a palindr
+                                                            ome. 
+   40 0000005C E3A00001 
+                       PALIN   MOV              r0, #1      ; if palindrome, as
+                                                            sign value 1 to r0
+   41 00000060 48 65 20 
+              6C 69 76 
+              65 64 20 
+              61 73 20 
+              61 20 64 
+              65 76 69 
+              6C 2C 20 
+              65 68 3F STRING  DCB              "He lived as a devil, eh?" 
+                                                            ; string
+   42 00000078 00      EoS     DCB              0x00        ; end of string 
+   43 00000079                 END
+Command Line: --debug --xref --bi --apcs=interwork --depend=.\q2.d -o.\q2.o -IC
+:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include --predefine="__EVAL SETA 1" --l
+ist=.\q2.lst q2.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Compare 0000003C
+
+Symbol: Compare
+   Definitions
+      At line 28 in file q2.s
+   Uses
+      None
+Comment: Compare unused
+EoS 00000078
+
+Symbol: EoS
+   Definitions
+      At line 42 in file q2.s
+   Uses
+      At line 4 in file q2.s
+Comment: EoS used once
+LOOP 00000008
+
+Symbol: LOOP
+   Definitions
+      At line 7 in file q2.s
+   Uses
+      At line 25 in file q2.s
+      At line 31 in file q2.s
+
+NOT 00000054
+
+Symbol: NOT
+   Definitions
+      At line 38 in file q2.s
+   Uses
+      At line 29 in file q2.s
+Comment: NOT used once
+Opoint 00000014
+
+Symbol: Opoint
+   Definitions
+      At line 12 in file q2.s
+   Uses
+      At line 35 in file q2.s
+Comment: Opoint used once
+PALIN 0000005C
+
+Symbol: PALIN
+   Definitions
+      At line 40 in file q2.s
+   Uses
+      At line 9 in file q2.s
+Comment: PALIN used once
+QUIT 00000058
+
+Symbol: QUIT
+   Definitions
+      At line 39 in file q2.s
+   Uses
+      At line 39 in file q2.s
+Comment: QUIT used once
+STRING 00000060
+
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+Symbol: STRING
+   Definitions
+      At line 41 in file q2.s
+   Uses
+      At line 3 in file q2.s
+Comment: STRING used once
+movB 0000004C
+
+Symbol: movB
+   Definitions
+      At line 34 in file q2.s
+   Uses
+      At line 19 in file q2.s
+Comment: movB used once
+question2 00000000
+
+Symbol: question2
+   Definitions
+      At line 1 in file q2.s
+   Uses
+      None
+Comment: question2 unused
+10 symbols
+341 symbols in table

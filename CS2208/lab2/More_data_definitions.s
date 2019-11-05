@@ -1,0 +1,22 @@
+		AREA More_data_definitions, CODE, READONLY
+		ENTRY
+loop 	B loop
+data_1 	SPACE 3
+data_2 	SPACE 3
+		ALIGN
+data_3 	SPACE 3
+		DCD 0x12345678
+		DCD +2_1111000011110000
+		DCD -2_1111000011110000
+		DCW 255
+		DCW -255
+
+		DCB &0A
+		ALIGN
+
+		DCD 1,2,3,4
+		DCB 5
+		DCD 6
+
+
+		END

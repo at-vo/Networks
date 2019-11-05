@@ -1,0 +1,132 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             final, CODE, READONLY
+    2 00000000                 ENTRY
+    3 00000000 E28FD040 
+                       main    ADR              sp,  STACK
+    4 00000004 E28F1050        ADR              r1,  input
+    5 00000008 E4910004        LDR              r0,[r1],#4
+    6 0000000C E5ADF004        STR              pc,[sp,#4]!
+    7 00000010 EA000001 
+                       call    B                fun1
+    8 00000014 E5810000        STR              r0, [r1]
+    9 00000018 EAFFFFFE 
+                       LOOP    B                LOOP
+   10 0000001C E9AD0006 
+                       fun1    STMFA            sp!,{r1,r2}
+   11 00000020 E1A01000        MOV              r1,r0
+   12 00000024 E0020091        MUL              r2,r1,r0
+   13 00000028 E0000291        MUL              r0,r1,r2
+   14 0000002C E51D4008 
+                       return  ldr              r4, [sp, #-8]
+   15 00000030 E2444004        sub              r4, #4
+   16 00000034 E1A0F004        mov              pc, r4
+   17 00000038                 AREA             final, DATA, READWRITE
+   18 00000038 00000000 
+              00000000 
+              00000000 
+              00000000         DCD              0, 0, 0, 0
+   19 00000048 FFFFFFFF 
+                       STACK   DCD              0xFFFFFFFF
+   20 0000004C 00000000 
+              00000000 
+              00000000 
+              00000000         DCD              0, 0, 0, 0
+   21 0000005C 00000011 
+                       input   DCD              0x11
+   22 00000060 00000000 
+                       output  DCD              0x00
+   23 00000064                 END
+Command Line: --debug --xref --bi --apcs=interwork --depend=.\final.d -o.\final
+.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include --predefine="__EVAL SETA 
+1" --list=.\final.lst final.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+LOOP 00000018
+
+Symbol: LOOP
+   Definitions
+      At line 9 in file final.s
+   Uses
+      At line 9 in file final.s
+Comment: LOOP used once
+STACK 00000048
+
+Symbol: STACK
+   Definitions
+      At line 19 in file final.s
+   Uses
+      At line 3 in file final.s
+Comment: STACK used once
+call 00000010
+
+Symbol: call
+   Definitions
+      At line 7 in file final.s
+   Uses
+      None
+Comment: call unused
+final 00000000
+
+Symbol: final
+   Definitions
+      At line 1 in file final.s
+   Uses
+      None
+Comment: final unused
+fun1 0000001C
+
+Symbol: fun1
+   Definitions
+      At line 10 in file final.s
+   Uses
+      At line 7 in file final.s
+Comment: fun1 used once
+input 0000005C
+
+Symbol: input
+   Definitions
+      At line 21 in file final.s
+   Uses
+      At line 4 in file final.s
+Comment: input used once
+main 00000000
+
+Symbol: main
+   Definitions
+      At line 3 in file final.s
+   Uses
+      None
+Comment: main unused
+output 00000060
+
+Symbol: output
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+   Definitions
+      At line 22 in file final.s
+   Uses
+      None
+Comment: output unused
+return 0000002C
+
+Symbol: return
+   Definitions
+      At line 14 in file final.s
+   Uses
+      None
+Comment: return unused
+9 symbols
+340 symbols in table

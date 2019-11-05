@@ -1,0 +1,168 @@
+public Record successor(Pair k) {
+
+		if (this.root == null) {
+			return null;
+		}
+		Record get = get(k);
+		Record toReturn = null;
+		if (get == null) {
+			DictNode curr = this.root;
+			while (curr != null) {
+				int comp = k.compareTo(curr.getElement().getKey());
+				if (comp == -1) {
+					break;
+				} else if (comp == 1 && curr.getRight() != null) {
+					curr = curr.getRight();
+				}
+			}
+			while (curr.getLeft() != null) {
+				curr = curr.getLeft();
+			}
+			return curr.getElement();
+
+		} else {
+			DictNode curr = this.root;
+
+			while (curr != null) {
+				int comp = k.compareTo(curr.getElement().getKey());
+				if (comp == 0) {
+					if (curr.getRight() != null) {
+						curr = curr.getRight();
+						while (curr.getLeft() != null) {
+							curr = curr.getLeft();
+						}
+						return curr.getElement();
+					} else {
+						DictNode parP = curr.getParent();
+						while (curr != this.root && parP.getRight() == curr) {
+							curr = parP;
+							parP = curr.getParent();
+						}
+						if (curr == this.root) {
+							return null;
+						} else {
+							return parP.getElement();
+						}
+					}
+				} else if (comp == -1) {
+					curr = curr.getLeft();
+				} else if (comp == 1) {
+					curr = curr.getRight();
+				}
+			}
+		}
+		return toReturn;
+	}
+
+	/**
+	 * Returns the predecessor of k (the record from the ordered dictionary with
+	 * largest key smaller than k; it returns null if the given key has no
+	 * predecessor. The given key DOES NOT need to be in the dictionary.
+	 */
+	public Record predecessor(Pair k) {
+		if (this.root == null) {
+			return null;
+		}
+		Record get = get(k);
+		if (get == null) {
+			DictNode curr = this.root;
+			while (curr != null) {
+				int comp = k.compareTo(curr.getElement().getKey());
+				if (comp == 1) {
+					break;
+				} else if (comp == -1 && curr.getLeft() != null) {
+					curr = curr.getLeft();
+				}
+			}
+			while (curr.getRight() != null) {
+				curr = curr.getRight();
+			}
+			return curr.getElement();
+
+		} else {
+			DictNode curr = this.root;
+			while (curr != null) {
+				int comp = k.compareTo(curr.getElement().getKey());
+
+				if (comp == -1) {
+					curr = curr.getLeft();
+				} else if (comp == 1) {
+					curr = curr.getRight();
+				} else if (comp == 0) {
+					if (curr.getLeft() != null) {
+						curr = curr.getLeft();
+						while (curr.getRight() != null) {
+							curr = curr.getRight();
+						}
+						return curr.getElement();
+					} else {
+						DictNode parP = curr.getParent();
+						while ((curr != this.root) && (parP.getLeft() == curr)) {
+							curr = parP;
+							parP = curr.getParent();
+						}
+						if (curr == this.root) {
+							return null;
+						} else {
+							return parP.getElement();
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	public Record predecessor(Pair k) {
+		if (this.root == null) {
+			return null;
+		}
+		Record get = get(k);
+		if (get == null) {
+			DictNode curr = this.root;
+			while (curr != null) {
+				int comp = k.compareTo(curr.getElement().getKey());
+				if (comp == 1) {
+					break;
+				} else if (comp == -1 && curr.getLeft() != null) {
+					curr = curr.getLeft();
+				}
+			}
+			while (curr.getRight() != null) {
+				curr = curr.getRight();
+			}
+			return curr.getElement();
+
+		} else {
+			DictNode curr = this.root;
+			while (curr != null) {
+				int comp = k.compareTo(curr.getElement().getKey());
+
+				if (comp == -1) {
+					curr = curr.getLeft();
+				} else if (comp == 1) {
+					curr = curr.getRight();
+				} else if (comp == 0) {
+					if (curr.getLeft() != null) {
+						curr = curr.getLeft();
+						while (curr.getRight() != null) {
+							curr = curr.getRight();
+						}
+						return curr.getElement();
+					} else {
+						DictNode parP = curr.getParent();
+						while ((curr != this.root) && (parP.getLeft() == curr)) {
+							curr = parP;
+							parP = curr.getParent();
+						}
+						if (curr == this.root) {
+							return null;
+						} else {
+							return parP.getElement();
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}

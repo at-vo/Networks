@@ -1,0 +1,52 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             prog, CODE, READONLY
+    2 00000000                 ENTRY
+    3 00000000 E3A0000C        MOV              r0, #0xC
+    4 00000004 E3A01001        MOV              r1, #0x1
+    5 00000008 E3A02008        MOV              r2, #0x8
+    6 0000000C E3A03030        MOV              r3, #0x30
+    7 00000010 E7534181        LDRB             r4,[r3, -r1, LSL #3]
+    8 00000014 E6535142        LDRB             r5,[r3],-r2, ASR #2
+    9 00000018 E7F26DE1        LDRB             r6,[r2, r1, ROR #27]!
+   10 0000001C E0801011        ADD              r1, r0, r1, LSL r0
+   11 00000020 EAFFFFFE 
+                       Loop    B                Loop
+   12 00000024 11 22 33 
+              44 55            DCB              0x11, 0x22, 0x33, 0x44, 0x55
+   13 00000029 66 77 88 
+              99 AA            DCB              0x66, 0x77, 0x88, 0x99, 0xAA
+   14 0000002E BB CC DD 
+              EE FF            DCB              0xBB, 0xCC, 0xDD, 0xEE, 0xFF
+   15 00000033                 END
+Command Line: --debug --xref --bi --apcs=interwork --depend=.\test.d -o.\test.o
+ -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include --predefine="__EVAL SETA 1"
+ --list=.\test.lst test.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Loop 00000020
+
+Symbol: Loop
+   Definitions
+      At line 11 in file test.s
+   Uses
+      At line 11 in file test.s
+Comment: Loop used once
+prog 00000000
+
+Symbol: prog
+   Definitions
+      At line 1 in file test.s
+   Uses
+      None
+Comment: prog unused
+2 symbols
+333 symbols in table

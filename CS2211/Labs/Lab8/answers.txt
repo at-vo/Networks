@@ -1,0 +1,33 @@
+2.	
+Key * key_construct(char *in_name, int in_id)
+{
+	Key *key;
+	key = (Key *) malloc(sizeof(Key));
+	strcpy(key->name, in_name);
+	key->id = in_id;
+	return key;
+}
+
+Key *key_construct(char *in)name, int in_id)
+{
+	Key *key;
+	key->name = strdup(in_name);
+	key->id = in_id;
+	return key;
+}
+
+3.
+BStree bstree_ini(int size)
+{
+	BStree_struct *bsts;
+    	BStree bst;
+    	Node *nodes;
+    	unsigned char *chars;
+	nodes = (Node *)calloc(size + 1, sizeof(Node));
+    	chars = (unsigned char *)calloc(size + 1, sizeof(unsigned char));
+    	bsts->tree_nodes = nodes;
+    	bsts->is_free = chars;
+    	bsts->size = size;
+	bst = bsts;
+	return bst;
+}

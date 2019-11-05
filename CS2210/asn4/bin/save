@@ -1,0 +1,323 @@
+public class OrderedDictionary implements OrderedDictionaryADT {
+
+	private DictNode root;
+
+	public OrderedDictionary() {
+		this.root = null;
+	}
+
+	public Record get(Pair k) {
+		DictNode curr = this.root;
+		Record toGet = null;
+		while (curr.getElement() != null) {
+			int comp = k.compareTo(curr.getElement().getKey());
+			if (curr.isLeaf()) {
+				break;
+			}
+			if (comp == -1) {
+				curr = curr.getLeft();
+			} else if (comp == 1) {
+				curr = curr.getRight();
+			} else if (comp == 0 ) {
+				toGet = curr.getElement();
+				break;
+			}
+		}
+		return toGet;
+	}
+
+
+	/**
+	 * Inserts r into the ordered dictionary. It throws a DictionaryException if a
+	 * record with the same key as r is already in the dictionary.
+	 */
+	public void put(Record r) throws DictionaryException {
+		DictNode toPut = new DictNode(r);
+		if (this.root == null) {
+			this.root = toPut;
+		} else if (get(r.getKey()) != null) {
+			throw new DictionaryException("key is already");
+		} else {
+			DictNode curr = this.root;
+			DictNode prev = null;
+			while (curr.getElement() != null) {
+				int comp = r.getKey().compareTo(curr.getElement().getKey());
+				if (comp == -1) {
+					prev = curr;
+					curr = curr.getLeft();
+				} else if (comp == 1) {
+					prev = curr;
+					curr = curr.getRight();
+				}
+			}
+//			if (curr.getElement() == null) {
+				int comp = r.getKey().compareTo(prev.getElement().getKey());
+				if (comp == -1) {
+					prev.setLeft(toPut);
+				} else if (comp == 1) {
+					prev.setRight(toPut);
+				}
+				toPut.setParent(prev);
+				toPut.setLeft(new DictNode(null));
+				toPut.setRight(new DictNode(null));
+//			}
+		}
+
+	}
+
+	/**
+	 * Removes the record with key k from the dictionary. It throws a
+	 * DictionaryException if the record is not in the dictionary.
+	 */
+	public void remove(Pair k) throws DictionaryException {
+		Record get = get(k);
+		if (get == null) {
+			throw new DictionaryException("key not");
+		}
+		else {
+			DictNode curr = this.root;
+			DictNode prev = curr;
+			while (curr.getElement() != null) {
+				int comp = k.compareTo(curr.getElement().getKey());
+				if (comp == 0) {
+					break;
+				} else if (comp == -1) {
+					prev = curr;
+					curr = curr.getLeft();
+				} else if (comp == 1) {
+					prev = curr;
+					curr = curr.getRight();
+				}
+			}
+			if (curr.isLeaf()) {
+				if (prev.getLeft() == curr) {
+					prev.setLeft(null);
+				} else if (prev.getRight() == curr) {
+					prev.setRight(null);
+				}
+			} else {
+				Record succeed = successor(curr.getElement().getKey());
+				DictNode look = curr;
+				while (look != null) {
+					int comp = look.getElement().getKey().compareTo(succeed.getKey());
+					if (comp == 0) {
+						break;
+					} else if (comp == -1) {
+						look = look.getLeft();
+					} else if (comp == 1) {
+						look = look.getRight();
+					}
+				}
+				if (prev.getLeft() == curr) {
+					prev.setLeft(look);
+				} else if (prev.getRight() == curr) {
+					prev.setRight(look);
+				}
+				look.setRight(curr.getRight());
+			}
+		}
+
+	}
+
+	/**
+	 * Returns the successor of k (the record from the ordered dictionary with
+	 * smallest key larger than k); it returns null if the given key has no
+	 * successor. The given key DOES NOT need to be in the dictionary.
+	 */
+	public Record successor(Pair k) {
+		if (this.root == null) {
+			return null;
+		}
+		Record get = get(k);
+		Record toReturn = null;
+		if (get == null) {
+			DictNode curr = this.root;
+			while (curr != null) {
+				int comp = k.compareTo(curr.getElement().getKey());
+				if (comp == -1) {
+					break;
+				} else if (comp == 1 && curr.getRight() != null) {
+					curr = curr.getRight();
+				}
+			}
+			while (curr.getLeft() != null) {
+				curr = curr.getLeft();
+			}
+			return curr.getElement();
+
+		} else {
+			DictNode curr = this.root;
+
+			while (curr != null) {
+				int comp = k.compareTo(curr.getElement().getKey());
+				if (comp == 0) {
+					if (curr.getRight() != null) {
+						curr = curr.getRight();
+						while (curr.getLeft() != null) {
+							curr = curr.getLeft();
+						}
+						return curr.getElement();
+					} else {
+						DictNode parP = curr.getParent();
+						while (curr != this.root && parP.getRight() == curr) {
+							curr = parP;
+							parP = curr.getParent();
+						}
+						if (curr == this.root) {
+							return null;
+						} else {
+							return parP.getElement();
+						}
+					}
+				} else if (comp == -1) {
+					curr = curr.getLeft();
+				} else if (comp == 1) {
+					curr = curr.getRight();
+				}
+			}
+		}
+		return toReturn;
+	}
+
+	/**
+	 * Returns the predecessor of k (the record from the ordered dictionary with
+	 * largest key smaller than k; it returns null if the given key has no
+	 * predecessor. The given key DOES NOT need to be in the dictionary.
+	 */
+	public Record predecessor(Pair k) {
+		if (this.root == null) {
+			return null;
+		}
+		Record get = get(k);
+		if (get == null) {
+			DictNode curr = this.root;
+			while (curr != null) {
+				int comp = k.compareTo(curr.getElement().getKey());
+				if (comp == 1) {
+					break;
+				} else if (comp == -1 && curr.getLeft() != null) {
+					curr = curr.getLeft();
+				}
+			}
+			while (curr.getRight() != null) {
+				curr = curr.getRight();
+			}
+			return curr.getElement();
+
+		} else {
+			DictNode curr = this.root;
+			while (curr != null) {
+				int comp = k.compareTo(curr.getElement().getKey());
+
+				if (comp == -1) {
+					curr = curr.getLeft();
+				} else if (comp == 1) {
+					curr = curr.getRight();
+				} else if (comp == 0) {
+					if (curr.getLeft() != null) {
+						curr = curr.getLeft();
+						while (curr.getRight() != null) {
+							curr = curr.getRight();
+						}
+						return curr.getElement();
+					} else {
+						DictNode parP = curr.getParent();
+						while ((curr != this.root) && (parP.getLeft() == curr)) {
+							curr = parP;
+							parP = curr.getParent();
+						}
+						if (curr == this.root) {
+							return null;
+						} else {
+							return parP.getElement();
+						}
+					}
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Returns the record with smallest key in the ordered dictionary. Returns null
+	 * if the dictionary is empty.
+	 */
+	public Record smallest() {
+		if (this.root == null) {
+			return null;
+		}
+		DictNode curr = this.root;
+		while (curr.getLeft() != null) {
+			curr = curr.getLeft();
+		}
+		return curr.getElement();
+	}
+
+	/**
+	 * Returns the record with largest key in the ordered dictionary. Returns null
+	 * if the dictionary is empty.
+	 */
+	public Record largest() {
+		if (this.root == null) {
+			return null;
+		}
+		DictNode curr = this.root;
+		while (curr.getRight() != null) {
+			curr = curr.getRight();
+		}
+		return curr.getElement();
+	}
+
+	/**
+	 * DictNode private class
+	 */
+	private class DictNode {
+		private DictNode left;
+		private DictNode right;
+		private DictNode parent;
+		private Record element;
+
+		public DictNode(Record element) {
+			this.left = null;
+			this.right = null;
+			this.parent = null;
+			this.element = element;
+		}
+
+		public DictNode getLeft() {
+			return this.left;
+		}
+
+		public DictNode getRight() {
+			return this.right;
+		}
+
+		public boolean isLeaf() {
+			return (this.left == null && this.right == null);
+		}
+
+		public DictNode getParent() {
+			return this.parent;
+		}
+
+		public void setLeft(DictNode node) {
+			this.left = node;
+		}
+
+		public void setRight(DictNode node) {
+			this.right = node;
+		}
+
+		public void setParent(DictNode parent) {
+			this.parent = parent;
+		}
+
+		public Record getElement() {
+			return this.element;
+		}
+
+		public void setElement(Record element) {
+			this.element = element;
+		}
+	}
+}

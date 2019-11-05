@@ -1,0 +1,68 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             pipe, CODE, READONLY
+    2 00000000         
+    3 00000000 E28FD02C        ADR              sp,stack    ;define the stack
+    4 00000004 E1A0000F        MOV              r0,pc
+    5 00000008 E52DF004        STR              pc,[sp,#-4]!
+    6 0000000C E90D8000        STMFD            sp,{pc}
+    7 00000010 EAFFFFFE 
+                       Loop    B                Loop
+    8 00000014         
+    9 00000014                 AREA             pipe, DATA, READWRITE
+   10 00000014 00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00            SPACE            0x20        ;Stack body
+   11 00000034 00000000 
+                       stack   DCD              0x00        ;TOS
+   12 00000038 23              DCB              0x23
+   13 00000039         
+   14 00000039                 END
+Command Line: --debug --xref --bi --apcs=interwork --depend=.\assembly_lab_6_q1
+_source.d -o.\assembly_lab_6_q1_source.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\C
+MSIS\Include --predefine="__EVAL SETA 1" --list=.\assembly_lab_6_q1_source.lst 
+Assembly_Lab_6_Q1_Source.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Loop 00000010
+
+Symbol: Loop
+   Definitions
+      At line 7 in file Assembly_Lab_6_Q1_Source.s
+   Uses
+      At line 7 in file Assembly_Lab_6_Q1_Source.s
+Comment: Loop used once
+pipe 00000000
+
+Symbol: pipe
+   Definitions
+      At line 1 in file Assembly_Lab_6_Q1_Source.s
+   Uses
+      None
+Comment: pipe unused
+stack 00000034
+
+Symbol: stack
+   Definitions
+      At line 11 in file Assembly_Lab_6_Q1_Source.s
+   Uses
+      At line 3 in file Assembly_Lab_6_Q1_Source.s
+Comment: stack used once
+3 symbols
+334 symbols in table

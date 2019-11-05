@@ -1,0 +1,94 @@
+bba    aa
+aab  aab
+bba  aa
+aab  abb
+bba   aaa
+bba    aa
+aab  aab
+bba  aa
+aab  abb
+bba   aaabba    aa
+aab  aab
+bba  aa
+aab  abb
+bba   aaabba    aa
+aab  aab
+bba  aa
+aab  abb
+bba   aaabba    aa
+aab  aab
+bba  aa
+aab  abb
+bba   aaabba    aa
+aab  aab
+bba  aa
+aab  abb
+bba   aaabba    aa
+aab  aab
+bba  aa
+aab  abb
+bba   aaabba    aa
+aab  aab
+bba  aa
+aab  abb
+bba   aaabba    aa
+aab  aab
+bba  aa
+aab  abb
+bba   aaabba    aa
+aab  aab
+bba  aa
+aab  abb
+bba   aaabba    aa
+aab  aab
+bba  aa
+aab  abb
+bba   aaabba    aa
+aab  aab
+bba  aa
+aab  abb
+bba   aaabba    aa
+aab  aab
+bba  aa
+aab  abb
+bba   aaabba    aa
+aab  aab
+bba  aa
+aab  abb
+bba   aaabba    aa
+aab  aab
+bba  aa
+aab  abb
+bba   aaabba    aa
+aab  aab
+bba  aa
+aab  abb
+bba   aaabba    aa
+aab  aab
+bba  aa
+aab  abb
+bba   aaabba    aa
+aab  aab
+bba  aa
+aab  abb
+bba   aaabba    aa
+aab  aab
+bba  aa
+aab  abb
+bba   aaabba    aa
+aab  aab
+bba  aa
+aab  abb
+bba   aaabba    aa
+aab  aab
+bba  aa
+aab  abb
+bba   aaabba    aa
+aab  aab
+bba  aa
+aab  abb
+bba   aaabba    aa
+aab  aab
+bba  aa
+aab  abb
+bba   aaa

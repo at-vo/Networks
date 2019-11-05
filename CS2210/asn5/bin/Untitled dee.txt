@@ -1,0 +1,26 @@
+while ((line1 = file.readLine()) != null && (line2 = file.readLine()) != null) {
+				for (int i = 0; i<line1.length();i++) {
+					char line1Char = line1.charAt(i);
+					char line2Char = line2.charAt(i);
+
+					if (line1Char == 'S')
+						start = count;
+					else if(line1Char == 'D')
+						destination = count;
+
+					if (i%2 == 0 || i==0) {
+						if (Character.isDigit(line2Char) || (Character.isLetter(line2Char) && ((line2Char != 'S')) && (line2Char != 'D'))) {
+							Map.insertEdge(Map.getNode(count), Map.getNode(count+width), line2Char);
+						}
+						if (i==(line1.length()-1)) //if it is the last vertex in the list, count must be incremented for the next set of lines
+							count++;
+					}
+					else if (i%2 !=0){
+						if (Character.isDigit(line1Char) || (Character.isLetter(line1Char) && ((line1Char != 'S')) && (line1Char != 'D'))) {
+							Map.insertEdge(Map.getNode(count), Map.getNode(count+1), line1Char);
+							count++;
+						}
+						else count++;
+					}
+				}
+			}

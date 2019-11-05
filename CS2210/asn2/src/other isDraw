@@ -1,0 +1,31 @@
+			if (empty_positions > 0) {
+				for (int i = 0; i < boardSize; i++) {
+					for (int j = 0; j < boardSize; j++) {
+						int colCheck; 		// checks columns around a tile
+						if (gameBoard[i][j] == empty) {
+							colCheck = i - 1;
+							if (colCheck >= 0) {
+								for (int k = 0; k < boardSize; k++) {
+									if (gameBoard[colCheck][k] == symbol) 
+										return false;
+									
+								}
+							}
+							colCheck = i;
+							for (int k = 0; k < boardSize; k++) {
+								if (gameBoard[colCheck][k] == symbol) {
+									return false;
+								}
+							}
+							colCheck = i + 1;
+							if (colCheck < boardSize) {
+								for (int k = 0; k < boardSize; k++) {
+									if (gameBoard[colCheck][k] == symbol) {
+										return false;
+									}
+								}
+							}
+						}
+					}
+				}
+			}

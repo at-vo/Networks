@@ -1,0 +1,61 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             prog1, code, READONLY
+    2 00000000                 ENTRY
+    3 00000000 E3A03002        MOV              r3,#2
+    4 00000004 E59F1038        LDR              r1, =0xCCCCCCCC ;in binary 1100
+                                                             1100 1100 1100 110
+                                                            0 1100 1100 1100
+    5 00000008         
+    6 00000008 E1A01281        LSL              r1,r1,#5
+    7 0000000C E1A01311        LSL              r1,r1,r3
+    8 00000010 E1A01521        LSR              r1,r1,#10
+    9 00000014 E1A01331        LSR              r1,r1,r3
+   10 00000018 E1A01141        ASR              r1,r1,#2
+   11 0000001C E1A01781        LSL              r1,r1,#15
+   12 00000020 E1A01841        ASR              r1,r1,#16
+   13 00000024         
+   14 00000024 E1A01351        ASR              r1,r1,r3
+   15 00000028         
+   16 00000028 E1A01261        ROR              r1,r1,#4
+   17 0000002C E1A01371        ROR              r1,r1,r3
+   18 00000030 E1A01061        RRX              r1,r1
+   19 00000034 E1A01061        RRX              r1,r1
+   20 00000038 E1A01061        RRX              r1,r1
+   21 0000003C E1A01061        RRX              r1,r1
+   22 00000040 EAFFFFFE 
+                       loop    B                loop
+   23 00000044                 END
+              CCCCCCCC 
+Command Line: --debug --xref --bi --apcs=interwork --depend=.\assembly_lab_3_q1
+.d -o.\assembly_lab_3_q1.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include -
+-predefine="__EVAL SETA 1" --list=.\assembly_lab_3_q1.lst "D:\Downloads\Courses
+\2yr\Comp Sci 2208\lab3\Assembly_Lab_3_Q1.s"
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+loop 00000040
+
+Symbol: loop
+   Definitions
+      At line 22 in file D:\Downloads\Courses\2yr\Comp
+   Uses
+      At line 22 in file D:\Downloads\Courses\2yr\Comp
+Comment: loop used once
+prog1 00000000
+
+Symbol: prog1
+   Definitions
+      At line 1 in file D:\Downloads\Courses\2yr\Comp
+   Uses
+      None
+Comment: prog1 unused
+2 symbols
+335 symbols in table

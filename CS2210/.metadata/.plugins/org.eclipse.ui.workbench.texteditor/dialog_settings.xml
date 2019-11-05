@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item value="false" key="isRegEx"/>
+		<item value="fun2[" key="selection"/>
+		<item value="false" key="casesensitive"/>
+		<item value="false" key="wholeword"/>
+		<list key="findhistory">
+			<item value="line2.charAt("/>
+			<item value="line1.charAt"/>
+		</list>
+		<list key="replacehistory">
+			<item value="fun2["/>
+			<item value="fun1[]"/>
+		</list>
+	</section>
+</section>

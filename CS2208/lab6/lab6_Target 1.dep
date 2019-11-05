@@ -1,0 +1,2 @@
+Dependencies for Project 'lab6', Target 'Target 1': (DO NOT MODIFY !)
+F (.\Assembly_Lab_6_Q2_Source.s)(0x5C9D2683)(--cpu ARM7TDMI --bi --pd "__EVAL SETA 1" -g --apcs=interwork -I C:\Keil\ARM\RV31\INC-I C:\Keil\ARM\CMSIS\Include--list .\assembly_lab_6_q2_source.lst --xref -o .\assembly_lab_6_q2_source.o --depend .\assembly_lab_6_q2_source.d)

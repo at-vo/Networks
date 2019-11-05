@@ -1,0 +1,1 @@
+.\codetest.o: codetest.s

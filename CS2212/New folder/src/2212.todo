@@ -1,0 +1,37 @@
+General:
+  ☐ Create Test Harnesses per implementation
+  ✔ Complete Impl. 1 @done (19-04-07 16:04)
+  ✔ Complete Impl. 2 @done (19-04-07 16:04)
+  ☐ Complete Impl. 3
+  ✔ Complete Impl. 4 @done (19-04-07 16:04)
+  ✔ Complete Impl. 5 @done (19-04-07 16:04)
+
+Implementation 1 (event factory and 3+ concrete event types):
+ ☐ based on EventFactory that follows Factory Method design pattern
+     ☐ EXAMPLE of impl. and use of the Factory Method design pattern is seen in the creation of states in StateFactory class.
+ ☐ eventtypeA, B, C, have been renamed to EventTypeClearance, EventTypeSale, EventTypeNew
+
+Implementation 2:
+ ☐ complete this..
+ ☐ low,medium,high disposable incomes should be used if, for example, a subscriber with a low income state subscribes to a channel for the product "bananas", they will be notified about an event concerning the bananas channel if the eventtype is sale or clearance, whereas a medium income might be sale, clearance, and new, and high income would only really care about new (maybe)
+ ☐ what does the subscriber do if his state is low income? if the subscriber gets notified of the event.
+ ☐ what does the specific state do? implement a low income state and handle sale, and clearance events by adding the event to a wishlist list.. i guess
+ ☐ I2: Implement three or more Concrete States for subscribers
+Implement three or more concrete states. The names of the states have to come from an enumeration (see Statename.java). Your new concrete states will have to implement the IState interface. You may want to alter the code given to you and use an AstractState class, instead of an IState interface, from which the concrete state classes will inherit from. Use your new states in your running demo to show that they handle events appropriately. 
+
+
+Implementation 3:
+  ☐ need to implement the strategies that post events to the channels, which then notifies the subscribers
+      ☐ if one of the strategies is matched, then add to the channels that match to strategies
+      ☐ implement strategytype for channel
+
+
+Implementation 4:
+ ☐ 
+
+Implementation 5:
+ ☐
+
+Test Harness:
+  ☐ 
+

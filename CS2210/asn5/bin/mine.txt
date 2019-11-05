@@ -1,0 +1,86 @@
+
+// iterative
+        // boolean forward = true;
+        // int transfers = 0;
+        // while (!stack.isEmpty()) { // while stack is not empty
+        // if (forward == true) {
+        // curr = stack.peek(); // look at top
+        // curr.setMark(true);
+        // if (curr.equals(this.dest)) { // checks if at destination
+        // break;
+        // } else {
+        // Iterator<GraphEdge> incident = graph.incidentEdges(curr); // checks possible
+        // routes
+        // while (incident.hasNext()) {
+        // GraphEdge edge = incident.next();
+        // GraphNode next = edge.secondEndpoint();
+        // if (next.getMark() == false) { // if endpoint not marked
+        // char checkLine = edge.getBusLine(); // checks busline of current edge
+        // if (checkLine == currLine) { // if on same line
+        // stack.push(next);
+        // } else if (checkLine != currLine && transfers < maxTransfers) {
+        // transfers++;
+        // currLine = checkLine;
+        // stack.push(next);
+        // }
+        // }
+        // }
+        // if (curr.getName() == stack.peek().getName()) {
+        // forward = false;
+        // }
+        // }
+        // } else {
+        // while (!stack.isEmpty()) {
+        // curr.setMark(false);
+        // GraphNode top = stack.pop();
+        // toPeek = stack.peek();
+        // GraphEdge edge = graph.getEdge(toPeek, top);
+        // if (edge.getBusLine() != currLine) {
+        // transfers--;
+        // currLine = edge.getBusLine();
+        // }
+        // }
+        // }
+
+        // }
+
+//sth
+        // public Stack<GraphNode> pathDFS(GraphNode curr, Stack<GraphNode> stack, int
+    // transfers, char currLine)
+    // throws GraphException {
+    // curr.setMark(true);
+    // stack.push(curr);
+    // if (curr.equals(this.dest)) {
+    // return stack;
+    // }
+    // Iterator<GraphEdge> incident = this.graph.incidentEdges(curr);
+    // while (incident.hasNext()) {
+    // GraphEdge edge = incident.next();
+    // GraphNode next = edge.secondEndpoint();
+    // if (next.getMark() == false) {
+    // if (edge.getBusLine() == currLine) {
+    // return pathDFS(next, stack, transfers, currLine);
+    // } else {
+    // if (transfers < maxTransfers) {
+    // transfers++;
+    // currLine = edge.getBusLine();
+    // return pathDFS(next, stack, transfers, currLine);
+    // }
+    // }
+    // }
+    // }
+    // curr.setMark(false);
+    // GraphNode top = stack.pop();
+    // if (top.getName() == curr.getName()) {
+    // GraphNode toPeek = stack.peek();
+    // GraphEdge edge = graph.getEdge(toPeek, top);
+    // if (edge.getBusLine() != currLine) {
+    // transfers--;
+    // currLine = edge.getBusLine();
+    // }
+    // }
+
+    // return stack;
+    // }
+
+//sad

@@ -1,0 +1,87 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             pipeline, CODE, READONLY
+    2 00000000                 ENTRY
+    3 00000000         
+    4 00000000 E28FD044        ADR              sp,stack    ;define the stack
+    5 00000004 E3A01011        MOV              r1,#0x11
+    6 00000008 E3A02022        MOV              r2,#0x22
+    7 0000000C E3A03033        MOV              r3,#0x33
+    8 00000010 E3A04044        MOV              r4,#0x44
+    9 00000014 E3A05055        MOV              r5,#0x55
+   10 00000018 E3A06066        MOV              r6,#0x66
+   11 0000001C E3A07077        MOV              r7,#0x77
+   12 00000020         
+   13 00000020 E82D003E        STMDA            sp!,{r1-r5}
+   14 00000024 E82D00C0        STMDA            sp!,{r6-r7} ; your 1st block mo
+                                                            ve instruction
+   15 00000028 E99D00FE        LDMIB            sp,{r1-r7}  ; your 2nd block mo
+                                                            ve instruction
+   16 0000002C         ; your 3rd block move instruction
+   17 0000002C EAFFFFFE 
+                       Loop    B                Loop
+   18 00000030         
+   19 00000030                 AREA             pipeline, DATA, READWRITE
+   20 00000030 00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00               SPACE            0x1C
+   21 0000004C 00000000 
+                       stack   DCD              0x00        ;TOS
+   22 00000050 00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00 00 00 
+              00               SPACE            0x1C
+   23 0000006C                 END
+Command Line: --debug --xref --bi --apcs=interwork --depend=.\assembly_lab_6_q2
+_source.d -o.\assembly_lab_6_q2_source.o -IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\C
+MSIS\Include --predefine="__EVAL SETA 1" --list=.\assembly_lab_6_q2_source.lst 
+Assembly_Lab_6_Q2_Source.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Loop 0000002C
+
+Symbol: Loop
+   Definitions
+      At line 17 in file Assembly_Lab_6_Q2_Source.s
+   Uses
+      At line 17 in file Assembly_Lab_6_Q2_Source.s
+Comment: Loop used once
+pipeline 00000000
+
+Symbol: pipeline
+   Definitions
+      At line 1 in file Assembly_Lab_6_Q2_Source.s
+   Uses
+      None
+Comment: pipeline unused
+stack 0000004C
+
+Symbol: stack
+   Definitions
+      At line 21 in file Assembly_Lab_6_Q2_Source.s
+   Uses
+      At line 4 in file Assembly_Lab_6_Q2_Source.s
+Comment: stack used once
+3 symbols
+334 symbols in table

@@ -1,0 +1,113 @@
+package strategies.publisher;
+
+import events.AbstractEvent;
+import publishers.AbstractPublisher;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import pubSubServer.AbstractChannel;
+import pubSubServer.ChannelDiscovery;
+import java.util.Iterator;
+import pubSubServer.*;
+import events.*;
+
+
+
+/**
+ * @author kkontog, ktsiouni, mgrigori
+ * Base Interface for the implementation of the Strategy Design Pattern
+ */
+public class Food extends AbstractStrategy {
+
+  List<String> foodList = Arrays.asList("asparagus",
+          "apples",
+          "avacado",
+          "alfalfa",
+          "almond",
+          "arugala",
+          "artichoke",
+          "applesauce",
+          "antelope",
+          "bruscetta",
+          "bacon",
+          "bagels",
+          "bison",
+          "barley",
+          "beer",
+          "bisque",
+          "bluefish",
+          "bread",
+          "broccoli",
+          "buritto",
+          "cake",
+          "carrots",
+          "celery",
+          "cheese",
+          "chicken",
+          "catfish",
+          "chips",
+          "chocolate",
+          "chowder",
+          "clams",
+          "coffee",
+          "cookies",
+          "corn",
+          "cupcakes",
+          "crab",
+          "curry",
+          "cereal",
+          "chimichanga",
+          "dates",
+          "dips",
+          "duck",
+          "dumplings",
+          "donuts",
+          "ginger",
+          "gnocchi",
+          "goose",
+          "granola",
+          "grapes",
+          "kale",
+          "kabobs",
+          "ketchup",
+          "kiwi",
+          "Pizza",
+          "Pepperoni",
+          "Porter",
+          "Pancakes",
+          "spinach",
+          "spaghetti",
+          "quesadilla");
+
+  public Food(){
+
+  }
+  
+  /**
+   * Whenever a publisher's {@link AbstractPublisher#publish()} is called, the call is forwarded to the particular Publisher's
+   * AbstractStrategy implementation of this method 
+   * @param publisherId the hashCode or any other unique identifier of the publisher of an AbstractEvent
+   */
+  public void doPublish(int publisherId){
+    EventMessage message = new EventMessage("Food Items on sale!", "All food items are now on sale");
+    AbstractEvent event = EventFactory.createEvent(EventType.EventTypeSale, publisherId, message);
+
+    ChannelEventDispatcher.getInstance().postEvent(event, this.foodList);
+
+  }
+  
+  
+  /**
+   * 
+   * Whenever a publisher's {@link AbstractPublisher#publish(AbstractEvent)} is called, the call is forwarded to the particular Publisher's
+   * AbstractStrategy implementation of this method
+   * 
+   * @param event the event to be published
+   * @param publisherId  the hashCode or any other unique identifier of the publisher of an AbstractEvent 
+   */
+  public void doPublish(AbstractEvent event, int publisherId){
+    ChannelEventDispatcher.getInstance().postEvent(event, this.foodList);  
+  }
+
+}
+  

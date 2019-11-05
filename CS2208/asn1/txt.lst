@@ -1,0 +1,140 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000                 AREA             question1, CODE, READONLY
+    2 00000000                 ENTRY
+    3 00000000 E3A04000        MOV              r4, #0      ; SUM 
+    4 00000004 E3A05000        MOV              r5, #0      ; COUNTER 
+    5 00000008 E28F0044        ADR              r0, UPC     ; r0 points to UPC 
+                                                            
+    6 0000000C E355000C 
+                       LOOP    CMP              r5, #12     ; 
+    7 00000010 0A000008        BEQ              FLOOP       ; 
+    8 00000014 E4D03001        LDRB             r3, [r0], #1 ; Load temp with U
+                                                            PC[offset COUNTER],
+                                                             increment UPC
+    9 00000018 E2433030        SUB              r3, r3, #48 ; Subtract 48 from 
+                                                            temp to convert fro
+                                                            m hex to decimal di
+                                                            git
+   10 0000001C E0833083        ADD              r3, r3, r3, LSL #1 ; multiply o
+                                                            dd digit number by 
+                                                            3
+   11 00000020 E0844003        ADD              r4, r4, r3  ; add odd number to
+                                                             sum
+   12 00000024 E4D03001        LDRB             r3, [r0], #1 ; Load temp with U
+                                                            PC[offset COUNTER],
+                                                             increment counter
+   13 00000028 E2433030        SUB              r3, r3, #48 ; Subtract 48 from 
+                                                            temp to convert fro
+                                                            m hex to decimal di
+                                                            git
+   14 0000002C E0844003        ADD              r4, r4, r3  ; add temp to SUM
+   15 00000030 E2855002        ADD              r5, r5, #2  ; increment counter
+                                                            
+   16 00000034 EAFFFFF4        B                LOOP        ; Send back to loop
+                                                             
+   17 00000038 E254400A 
+                       FLOOP   SUBS             r4, r4, #10 ; subtract 10 from 
+                                                            final sum until 0 o
+                                                            r negative
+   18 0000003C 0A000003        BEQ              r01         ; 
+   19 00000040 BA000000        BLT              r00         ; if less than 0, t
+                                                            hen the sum is inva
+                                                            lid since final sum
+                                                             mod 10 must equal 
+                                                            0 to be valid. Once
+                                                             it is less then it
+                                                             is not a multiple 
+                                                            of 10.
+   20 00000044 CAFFFFFB        BGT              FLOOP       ; else, Loop again
+   21 00000048 E3A00000 
+                       r00     MOV              r0, #0      ; UPC invalid.
+   22 0000004C EAFFFFFE 
+                       quit    B                quit        ; quits the process
+                                                             once UPC is invali
+                                                            d.
+   23 00000050 E3A00001 
+                       r01     MOV              r0, #1      ; UPC is valid.
+   24 00000054 30 36 30 
+              33 38 33 
+              33 32 38 
+              37 38 33 UPC     DCB              "060383328783" ; UPC string
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   25 00000060                 END
+Command Line: --debug --xref --bi --apcs=interwork --depend=.\txt.d -o.\txt.o -
+IC:\Keil\ARM\RV31\INC -IC:\Keil\ARM\CMSIS\Include --predefine="__EVAL SETA 1" -
+-list=.\txt.lst txt.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+FLOOP 00000038
+
+Symbol: FLOOP
+   Definitions
+      At line 17 in file txt.s
+   Uses
+      At line 7 in file txt.s
+      At line 20 in file txt.s
+
+LOOP 0000000C
+
+Symbol: LOOP
+   Definitions
+      At line 6 in file txt.s
+   Uses
+      At line 16 in file txt.s
+Comment: LOOP used once
+UPC 00000054
+
+Symbol: UPC
+   Definitions
+      At line 24 in file txt.s
+   Uses
+      At line 5 in file txt.s
+Comment: UPC used once
+question1 00000000
+
+Symbol: question1
+   Definitions
+      At line 1 in file txt.s
+   Uses
+      None
+Comment: question1 unused
+quit 0000004C
+
+Symbol: quit
+   Definitions
+      At line 22 in file txt.s
+   Uses
+      At line 22 in file txt.s
+Comment: quit used once
+r00 00000048
+
+Symbol: r00
+   Definitions
+      At line 21 in file txt.s
+   Uses
+      At line 19 in file txt.s
+Comment: r00 used once
+r01 00000050
+
+Symbol: r01
+   Definitions
+      At line 23 in file txt.s
+   Uses
+      At line 18 in file txt.s
+Comment: r01 used once
+7 symbols
+338 symbols in table
