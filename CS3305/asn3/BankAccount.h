@@ -1,6 +1,10 @@
-
+/**
+ * Dat Vo
+ * 250983323
+ * */
 //#ifdef BANKACCOUNT_H
 #define BANKACCOUNT_H
+#define maxchar 256 // maximum buffer
 #define overlimit 5000
 #define overfee 500
 #include <stdio.h>
@@ -12,21 +16,25 @@
 #include <string.h>
 #include <ctype.h>
 #include <errno.h>
+#include <sys/queue.h>
+#include <string.h>
 
 typedef struct BankAccount
 {
     float balance;  
-    char * type;
     char * name;
-    int transactionLimit;
+    char * type;
     int depositFee;
     int withdrawFee;
+    int transferFee;
+    int transactionBench;
     int transactionFee;
-    int additionalFee;
     int overdraftProtection;    // no = 0 yes = 1
     int overdraftFee;
 
 }bankacc;
+
+
 
 
 
