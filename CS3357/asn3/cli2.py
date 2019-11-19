@@ -31,13 +31,6 @@ for data in packet_data:
 
     # imitate do while loop
     while True:
-        #send socket again if timeout
-        if sock.gettimeout() == 0.0:
-            seq = changeSeq(seq) # change the seq
-            UDP_Packet = createPacket(ack,seq,data) # create packet
-            sock.sendto(UDP_Packet, (UDP_IP, UDP_PORT)) # send packet again
-            sock.settimeout(CONST_TIMEOUT) # reset timer
-
         #response from server
         data, serverAddress = sock.recvfrom(1024)
         unpacker = struct.Struct('I I 32s') # (ack, seq, chksum)
@@ -48,21 +41,16 @@ for data in packet_data:
         response_seq = server_reponse[1]
         response_chksum = server_reponse[3]
 
-        # if response from server indicates ack
-        if response_ack == 1:
-            sock.settimeout(None) # stops timer
-            break # breaks from loop
-        # else if response from server indicates nak, where ack == 0 
-        else:
-            seq = changeSeq(seq)
+        if (response_seq != seq) or (sock.gettimeout() == 0.0):
             UDP_Packet = createPacket(ack,seq,data) # create packet
             sock.sendto(UDP_Packet, (UDP_IP, UDP_PORT)) # send packet again
             sock.settimeout(CONST_TIMEOUT) # reset timer
+        else:
+            break
+
     seq = changeSeq(seq)
 
 sock.close()
-
-
 
 def createPacket(ack,seq,data):
     #Create the Checksum
