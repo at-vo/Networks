@@ -2,7 +2,6 @@
  * Dat Vo
  * 250983323
  * */
-#ifdef BANKACCOUNT_H
 #define BANKACCOUNT_H
 #define maxchar 256 // maximum buffer
 #define overlimit 5000
@@ -38,9 +37,4 @@ typedef struct BankAccount
 void deposit(bankacc** arr, char* name, int deposit);
 void withdraw(bankacc** arr, char* name, int withdraw);
 void transfer(bankacc** arr, char* name1, char* name2, int transfer);
-
-
-
-
-
-#endif 
+ 
