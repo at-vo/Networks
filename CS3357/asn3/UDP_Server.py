@@ -9,7 +9,7 @@ import random
 import time
 
 UDP_IP = "127.0.0.1"
-UDP_PORT = 14000
+UDP_PORT = 16001
 unpacker = struct.Struct('I I 8s 32s')
 respAck = 1 # response ack
 
@@ -52,15 +52,16 @@ def main():
                 UDP_Packet = createACK(respAck,seq)
                 curr_sequence = changeSeq(curr_sequence)
                 sock.sendto(UDP_Packet,addr)
-                #print("ack resp sent")
+                print("ack resp sent:",UDP_Packet)
 
             else:
                 print('Checksums Do Not Match, Packet Corrupt')
                 temp_sequence = changeSeq(curr_sequence)
                 UDP_Packet = createACK(respAck,temp_sequence)
                 sock.sendto(UDP_Packet,addr)
-                #print("nak resp sent")
+                print("nak resp sent:",UDP_Packet)
 
+    sock.close()
 def createACK(respAck,seq): #creates the ACK packet to return
     #Create the Checksum to return
     response_values = (respAck,seq)
@@ -80,22 +81,23 @@ def changeSeq(seq): #changes the sequence number
         seq = 0
     return seq
 
+### Network Functions ###
 def Network_Delay():
-    if True and random.choice([0,1,0]) == 1: # Set to False to disable Network Delay. Default is 33% packets are delayed
+    if False and random.choice([0,1,0]) == 1: # Set to False to disable Network Delay. Default is 33% packets are delayed
        time.sleep(.01)
        print("Packet Delayed")
     else:
         print("Packet Sent")
 
 def Network_Loss():
-    if True and random.choice([0,1,1,0]) == 1: # Set to False to disable Network Loss. Default is 50% packets are lost
+    if False and random.choice([0,1,1,0]) == 1: # Set to False to disable Network Loss. Default is 50% packets are lost
         print("Packet Lost")
         return(1)
     else:
         return(0)
 
 def Packet_Checksum_Corrupter(packetdata):
-     if True and random.choice([0,1,0,1]) == 1: #  # Set to False to disable Packet Corruption. Default is 50% packets are corrupt
+     if False and random.choice([0,1,0,1]) == 1: #  # Set to False to disable Packet Corruption. Default is 50% packets are corrupt
         print("packet corrupt")
         return(b'Corrupt!')
      else:

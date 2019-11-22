@@ -10,7 +10,7 @@ import random
 #define Constants
 CONST_TIMEOUT = 0.009 # 9ms
 UDP_IP = "127.0.0.1"
-UDP_PORT = 14000
+UDP_PORT = 16001
 
 def main():
     #Assign Packet data
@@ -45,6 +45,8 @@ def main():
                 response_seq = server_reponse[1]
                 response_chksum = server_reponse[2]
 
+                
+
                 if response_chksum!=ack:
                     if (response_seq != seq):
                         UDP_Packet = createPacket(ack,seq,data) # create packet
@@ -55,6 +57,7 @@ def main():
             except socket.timeout as err:
                 print("timeout\n")
                 sock.sendto(UDP_Packet, (UDP_IP, UDP_PORT)) # send packet again
+                print("packet sent:",UDP_Packet)
                 sock.settimeout(CONST_TIMEOUT) # reset timer
                 #print("packet resent")
 
