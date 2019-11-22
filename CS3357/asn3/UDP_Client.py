@@ -6,63 +6,61 @@ from socket import timeout
 import struct
 import sys
 import hashlib
+import random
 #define Constants
 CONST_TIMEOUT = 0.009 # 9ms
 UDP_IP = "127.0.0.1"
 UDP_PORT = 14000
 
-#Assign Packet data
-packet_data = ["NCC-1701","NCC-1422","NCC-1017"]
+def main():
+    #Assign Packet data
+    packet_data = ["NCC-1701","NCC-1422","NCC-1017"]
+    
+    print("UDP target IP:", UDP_IP)
+    print("UDP target port:", UDP_PORT)
 
-print("UDP target IP:", UDP_IP)
-print("UDP target port:", UDP_PORT)
+    # initialize reference to ack and seq
+    ack = 0
+    seq = 0
 
-# initialize reference to ack and seq
-ack = 0
-seq = 0
+    for data in packet_data:
+        UDP_Packet = createPacket(ack,seq,data.encode())
+        #Send the UDP Packet
+        sock = socket.socket(socket.AF_INET, # Internet
+                            socket.SOCK_DGRAM) # UDP
+        sock.sendto(UDP_Packet, (UDP_IP, UDP_PORT))
+        print("packet sent\n")
 
-for data in packet_data:
-    UDP_Packet = createPacket(ack,seq,data)
-    #Send the UDP Packet
-    sock = socket.socket(socket.AF_INET, # Internet
-                        socket.SOCK_DGRAM) # UDP
-    sock.sendto(UDP_Packet, (UDP_IP, UDP_PORT))
-    sock.settimeout(CONST_TIMEOUT)
+        # imitate do while loop
+        while True:
+            try:
+                sock.settimeout(CONST_TIMEOUT)
+                #response from server
+                data, serverAddress = sock.recvfrom(1024)
+                unpacker = struct.Struct('I I 32s') # (ack, seq, chksum)
+                server_reponse = unpacker.unpack(data) 
+                print("response received:", server_reponse)
+                #assign references
+                response_ack = server_reponse[0]
+                response_seq = server_reponse[1]
+                response_chksum = server_reponse[2]
 
-    # imitate do while loop
-    while True:
-        #send socket again if timeout
-        if sock.gettimeout() == 0.0:
-            seq = changeSeq(seq) # change the seq
-            UDP_Packet = createPacket(ack,seq,data) # create packet
-            sock.sendto(UDP_Packet, (UDP_IP, UDP_PORT)) # send packet again
-            sock.settimeout(CONST_TIMEOUT) # reset timer
+                if response_chksum!=ack:
+                    if (response_seq != seq):
+                        UDP_Packet = createPacket(ack,seq,data) # create packet
+                        sock.sendto(UDP_Packet, (UDP_IP, UDP_PORT)) # send packet again
+                        sock.settimeout(CONST_TIMEOUT) # reset timer
+                    else:
+                        break
+            except socket.timeout as err:
+                print("timeout\n")
+                sock.sendto(UDP_Packet, (UDP_IP, UDP_PORT)) # send packet again
+                sock.settimeout(CONST_TIMEOUT) # reset timer
+                #print("packet resent")
 
-        #response from server
-        data, serverAddress = sock.recvfrom(1024)
-        unpacker = struct.Struct('I I 32s') # (ack, seq, chksum)
-        server_reponse = unpacker.unpack(data) 
-        print("response received:", server_reponse)
-        #assign references
-        response_ack = server_reponse[0]
-        response_seq = server_reponse[1]
-        response_chksum = server_reponse[3]
+        seq = changeSeq(seq)
 
-        # if response from server indicates ack
-        if response_ack == 1:
-            sock.settimeout(None) # stops timer
-            break # breaks from loop
-        # else if response from server indicates nak, where ack == 0 
-        else:
-            seq = changeSeq(seq)
-            UDP_Packet = createPacket(ack,seq,data) # create packet
-            sock.sendto(UDP_Packet, (UDP_IP, UDP_PORT)) # send packet again
-            sock.settimeout(CONST_TIMEOUT) # reset timer
-    seq = changeSeq(seq)
-
-sock.close()
-
-
+    sock.close()
 
 def createPacket(ack,seq,data):
     #Create the Checksum
@@ -84,3 +82,13 @@ def changeSeq(seq):
     else:
         seq = 0
     return seq
+
+def Packet_Checksum_Corrupter(packetdata):
+    if True and random.choice([0,1,0,1]) == 1: #  # Set to False to disable Packet Corruption. Default is 50% packets are corrupt
+        print("packet corrupt")
+        return(b'Corrupt!')
+    else:
+        return(packetdata)
+
+
+main()
