@@ -2,6 +2,7 @@
  * Dat Vo
  * 250983323
  * */
+#ifndef BANKACCOUNT_H
 #define BANKACCOUNT_H
 #define maxchar 256 // maximum buffer
 #define overlimit 5000
@@ -18,10 +19,12 @@
 #include <sys/queue.h>
 #include <string.h>
 
+static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+
 typedef struct BankAccount
 {
     float balance;  
-    int * name;
+    char * name;
     char * type;
     int depositFee;
     int withdrawFee;
@@ -34,7 +37,30 @@ typedef struct BankAccount
 
 }bankacc;
 
-void deposit(bankacc** arr, char* name, int deposit);
-void withdraw(bankacc** arr, char* name, int withdraw);
-void transfer(bankacc** arr, char* name1, char* name2, int transfer);
+typedef struct withdraw
+{
+    char* account;
+    int amount;
+    bankacc * toArr;
+} wthdrw;
+
+typedef struct deposit
+{
+    char* account;
+    int amount;
+    bankacc * toArr;
+
+}depst;
+
+typedef struct transfer
+{
+    char* account;
+    int amount;
+    bankacc * toArr;
+
+}trnsfr;
+
+
+bankacc ** arr;
  
+#endif
