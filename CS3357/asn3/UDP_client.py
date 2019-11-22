@@ -45,9 +45,7 @@ def main():
                 response_seq = server_reponse[1]
                 response_chksum = server_reponse[2]
 
-                
-
-                if response_chksum!=ack:
+                if response_ack!=ack:
                     if (response_seq != seq):
                         UDP_Packet = createPacket(ack,seq,data) # create packet
                         sock.sendto(UDP_Packet, (UDP_IP, UDP_PORT)) # send packet again
