@@ -81,6 +81,9 @@ void transfer(void* input){
     pthread_mutex_unlock(&mutex);
 }
 
+void transaction(void *){
+
+}
 
 
 int main(){

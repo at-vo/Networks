@@ -37,29 +37,14 @@ typedef struct BankAccount
 
 }bankacc;
 
-typedef struct withdraw
+struct transaction
 {
-    char* account;
-    int amount;
-    bankacc * toArr;
-} wthdrw;
-
-typedef struct deposit
-{
-    char* account;
-    int amount;
-    bankacc * toArr;
-
-}depst;
-
-typedef struct transfer
-{
+    char[maxchar];
     char* account1;
     char* account2;
     int amount;
     bankacc * toArr;
-
-}trnsfr;
+};
 
 
 bankacc ** arr;
