@@ -203,15 +203,15 @@ void *clients(void *input){
             char* name = strtok(NULL, " ");;    // reference account number
             int dep = atoi(strtok(NULL, " "));  // reference amount for transaction
             if(deposit(name,dep)==1) 
-                printf("successful deposit");
+                printf("successful deposit account: %s, amount: %d\n",name,dep);
             else 
-                printf("unsuccessful deposit");
+                printf("unsuccessful deposit account: %s, amount: %d\n",name,dep);
             // withdrawal
         }else if(strcmp(token,"w")==0){
             char* name = strtok(NULL, " ");;
-            int dep = atoi(strtok(NULL, " "));
-            if(withdraw(name,dep))               
-                printf("successful withdrawal");
+            int with = atoi(strtok(NULL, " "));
+            if(withdraw(name,with))               
+                printf("successful withdrawal account: %s, amount: %d\n",name,with);
             else 
                 printf("unsuccessful withdrawal");
             //transfer
@@ -220,9 +220,9 @@ void *clients(void *input){
             char* acc2 = strtok(NULL, " ");;
             int trans = atoi(strtok(NULL, " "));
             if(transfer(acc1,acc2,trans)==1) 
-                printf("successful transfer");
+                printf("successful transfer account: %s, account: %s, amount: %d\n",acc1,acc2,trans);
             else 
-                printf("unsuccessful transfer");
+                printf("unsuccessful transfer account: %s, account: %s, amount: %d\n",acc1,acc2,trans);
         }
         token = strtok(NULL, " ");  //get next word
     }
@@ -243,11 +243,11 @@ int main()
     // create threadgroup based on largest of accounts depositors or clients
     pthread_t * threadgroup;
     if(numAccs[0]>=numAccs[1] && numAccs[0]>=numAccs[2]){
-        threadgroup = malloc(sizeof(pthread_t) * numAccs[0]); // creates threadgroup size of the number of accounts
+        threadgroup = malloc(sizeof(pthread_t) * numAccs[0]); // creates threadgroup size: number of accounts
     }else if(numAccs[1]>=numAccs[2] && numAccs[1]>=numAccs[0]){
-        threadgroup = malloc(sizeof(pthread_t) * numAccs[1]); // creates threadgroup size of the number of depositors
+        threadgroup = malloc(sizeof(pthread_t) * numAccs[1]); // creates threadgroup size: number of depositors
     }else{
-        threadgroup = malloc(sizeof(pthread_t) * numAccs[2]); // creates threadgroup size of the number of clients
+        threadgroup = malloc(sizeof(pthread_t) * numAccs[2]); // creates threadgroup size: number of clients
     }
     // initialize array of depositors and clients
     transac * depoGroup[numAccs[1]]; 
@@ -301,9 +301,7 @@ int main()
     char * fileout = "cpu_scheduling_output_file.txt";
     wp=fopen(fileout,"w");
     for (int i = 0; i < numAccs[0]; i++)
-    {
         fprintf("balance for account[%d]: %d \n",atoi(arr[i]->name[1]),arr[i]->balance);
-    }
     
     // destroy mutex
     pthread_mutex_destroy(&mutex);
