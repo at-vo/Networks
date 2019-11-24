@@ -36,7 +36,7 @@ void removeChar(char* name){
 
 /* Deposit */
 void deposit(void* input){
-    pthread_mutex_lock(&mutex);
+    //pthread_mutex_lock(&mutex);
     depst* ptr = (depst*) input;
     bankacc* acc = arr[atoi(ptr->account[1])];
     if(acc->depositFee !=0){
@@ -44,11 +44,11 @@ void deposit(void* input){
     }
     acc->balance += ptr->amount;
     acc->transactionNum++;
-    pthread_mutex_unlock(&mutex);
+    //pthread_mutex_unlock(&mutex);
 }
 /*Withdraw*/
 void withdraw(void* input){
-    pthread_mutex_lock(&mutex);
+    //pthread_mutex_lock(&mutex);
     wthdrw* ptr = (wthdrw*) input;
 
     bankacc* acc = arr[atoi(ptr->account[1])];
@@ -56,12 +56,12 @@ void withdraw(void* input){
         withdraw += acc->withdrawFee;
     }
     acc->balance -= ptr->
-    pthread_mutex_unlock(&mutex);
+    //pthread_mutex_unlock(&mutex);
 
 }
 /*transfer*/
 void transfer(void* input){
-    pthread_mutex_lock(&mutex);
+    //pthread_mutex_lock(&mutex);
     (trnsfr*) ptr = (trnsfr*) input
 
     bankacc* acc1 = arr[atoi(ptr->account1)];
@@ -78,11 +78,39 @@ void transfer(void* input){
     acc1->transactionNum++;
     acc2->balance += ptr->amount;
     acc2->transactionNum++;
-    pthread_mutex_unlock(&mutex);
+    //pthread_mutex_unlock(&mutex);
 }
 
 void transaction(void *){
 
+char * token = strtok(str," ");
+        while(token!=NULL){
+            if(token[0]=='c'){ // redundant but checking if its a client line
+                token = strtok(NULL, " ");
+                if(strcmp(token,"d")==0){
+                    depst* temp = (depst*) malloc(sizeof(depst));
+                    token = strtok(NULL, " "); // get acc
+                    removeChar(token);
+                    temp->toArr = arr[atoi(token)]; // get reference to acc in arr
+                    token = strtok(NULL, " "); // get amount
+                    temp->amount = atoi(token);
+                    pthread_create(&threadgroup[atoi(acc->name[2])],NULL,&deposit,&temp); // second null needs to be a struct
+                }else if(strcmp(token,"w")==0){
+                    token = strtok(NULL, " "); // get acc
+                    removeChar(token);
+                    bankacc* acc = arr[atoi(token)]; // get reference to acc in arr
+                    pthread_create(&threadgroup[atoi(acc->name[2])],NULL,&withdraw,NULL);
+                }else if(strcmp(token,"t")==0){
+                    token = strtok(NULL, " "); // get acc1
+                    removeChar(token);
+                    bankacc* acc1 = arr[atoi(token)]; // get reference to acc in arr
+                    token = strtok(NULL, " "); // get acc2
+                    removeChar(token);
+                    bankacc* acc2 = arr[atoi(token)]; // get reference to acc in arr
+
+                }
+            }
+        }
 }
 
 
@@ -129,17 +157,16 @@ int main(){
                     token = strtok(NULL, " ");
                     acc->depositFee = atoi(token);
                     token = strtok(NULL, " ");
-
                 }
                     //withdraw fees
-                if(token[0] == 'd'){
+                if(token[0] == 'w'){
                     token = strtok(NULL, " ");
                     acc->withdrawFee = atoi(token);
                     token = strtok(NULL, " ");
 
                 }                    
                     //transfer fees
-                if(token[0] == 'd'){
+                if(token[0] == 't'){
                     token = strtok(NULL, " ");
                     acc->transferFee = atoi(token);
                     token = strtok(NULL, " ");
@@ -190,36 +217,11 @@ int main(){
     }
     // calc transactions
     pthread_t * threadgroup = malloc(sizeof(pthread_t) * numAccs[2]); // creates threadgroup size of the number of clients
-    int i;
+    transac * trangroup[numAccs[2]]; 
+    int i = 0;
     while(fgets(str,maxchar,fp)!=NULL){
-        char * token = strtok(str," ");
-        while(token!=NULL){
-            if(token[0]=='c'){ // redundant but checking if its a client line
-                token = strtok(NULL, " ");
-                if(strcmp(token,"d")==0){
-                    depst* temp = (depst*) malloc(sizeof(depst));
-                    token = strtok(NULL, " "); // get acc
-                    removeChar(token);
-                    temp->toArr = arr[atoi(token)]; // get reference to acc in arr
-                    token = strtok(NULL, " "); // get amount
-                    temp->amount = atoi(token);
-                    pthread_create(&threadgroup[atoi(acc->name[2])],NULL,&deposit,&temp); // second null needs to be a struct
-                }else if(strcmp(token,"w")==0){
-                    token = strtok(NULL, " "); // get acc
-                    removeChar(token);
-                    bankacc* acc = arr[atoi(token)]; // get reference to acc in arr
-                    pthread_create(&threadgroup[atoi(acc->name[2])],NULL,&withdraw,NULL);
-                }else if(strcmp(token,"t")==0){
-                    token = strtok(NULL, " "); // get acc1
-                    removeChar(token);
-                    bankacc* acc1 = arr[atoi(token)]; // get reference to acc in arr
-                    token = strtok(NULL, " "); // get acc2
-                    removeChar(token);
-                    bankacc* acc2 = arr[atoi(token)]; // get reference to acc in arr
-
-                }
-            }
-        }
+        transac* tran = (transac*) malloc(sizeof(transac*));
+        strcpy(str,tran->client);   // save client in different string
     }
     //TODO: add num threads as count
     // for (size_t i = 0; i < count; i++)
