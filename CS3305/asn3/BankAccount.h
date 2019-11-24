@@ -47,9 +47,6 @@ typedef struct transaction
     pthread_t * group;
 }transac;
 
-
-
-
 bankacc ** arr;
  
 #endif

@@ -1,3 +1,7 @@
+/**
+ * Dat Vo
+ * 250983323
+ * */
 #include "BankAccount.h"
 
 /**
@@ -46,9 +50,8 @@ int* countline(char *filename){
     }
     acc->balance+=dep;
     acc->transactionNum+=1;
-    return 1;
     pthread_mutex_unlock(&mutex);
-
+    return 1;
 }
 /**
  * withdraw
@@ -72,34 +75,36 @@ int withdraw(char*name, int withdraw){
             fee *= acc->overdraftFee;
             withdraw += fee;
             if((acc->balance-withdraw)<5000){
+                pthread_mutex_unlock(&mutex);
                 return 0;
             }
         }
         else{//if no protection
+            pthread_mutex_unlock(&mutex);
             return 0;
         }
     }
     // if successful withdraw
     acc->balance-=withdraw;
     acc->transactionNum+=1;
-    return 1;
     pthread_mutex_unlock(&mutex);
+    return 1;
 }
 /**
  * transfer
- * @param acc1
- * @param acc2
- * @param trans
+ * @param acc1  account to withdraw from
+ * @param acc2  account to deposit to
+ * @param trans transaction amount
  * @brief return 1 if transfer success, 0 if failure
  * */
 int transfer(char*acc1,char*acc2, int trans){
     pthread_mutex_lock(&mutex);
-    if(1==deposit(acc1,trans) && 1==withdraw(acc2,withdraw)){
+    if(1==withdraw(acc1,trans) && 1==deposit(acc2,withdraw)){
+        pthread_mutex_unlock(&mutex);
         return 1;
     }
-    return 0;
     pthread_mutex_unlock(&mutex);
-
+    return 0;
 }
 /**
  * create account 
@@ -185,7 +190,7 @@ void *depositors(void*input){
 
 /**
  * clients 
- * @param input
+ * @param input void pointer for thread
  * @brief calls specific deposit, withdraw 
  *          or transfer on specific account
  * */
@@ -226,7 +231,6 @@ void *clients(void *input){
 int main()
 {
     char *filename = "cpu_scheduling_input_file.txt";
-    char * fileout = "cpu_scheduling_output_file.txt";
     int *numAccs = countline(filename); // [accounts, depositors, clients]
     arr = (bankacc**) malloc(sizeof(bankacc*)*(numAccs[0]));  // initializes array of bank accounts
     FILE * fp, *wp;
@@ -249,7 +253,6 @@ int main()
     transac * depoGroup[numAccs[1]]; 
     transac * cliGroup[numAccs[2]];
 
-    // wp=fopen(fileout,"w");
     // gets line in file until end of depositors
     while(fgets(str,maxchar,fp)!=NULL){
         char * token = strtok(str," "); // get first word
@@ -283,7 +286,7 @@ int main()
         pthread_create(&threadgroup[i],NULL,&createAccount,&arr[i]);
     for (int i = 0; i < numAccs[0]; i++)
         pthread_join(&threadgroup[i],NULL);
-    // deposit using threads
+    // depositers using threads
     for (size_t i = 0; i < numAccs[1]; i++)
         pthread_create(&threadgroup[i],NULL,&depositors,&depoGroup[i]);
     for (int i = 0; i < numAccs[1]; i++)
@@ -294,7 +297,16 @@ int main()
     for (int i = 0; i < numAccs[3]; i++)
         pthread_join(&threadgroup[i],NULL);
     
-
+    // write to file
+    char * fileout = "cpu_scheduling_output_file.txt";
+    wp=fopen(fileout,"w");
+    for (int i = 0; i < numAccs[0]; i++)
+    {
+        fprintf("balance for account[%d]: %d \n",atoi(arr[i]->name[1]),arr[i]->balance);
+    }
+    
+    // destroy mutex
+    pthread_mutex_destroy(&mutex);
 
     return 0;
 }
