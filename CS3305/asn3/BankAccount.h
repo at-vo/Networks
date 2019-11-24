@@ -54,7 +54,8 @@ typedef struct deposit
 
 typedef struct transfer
 {
-    char* account;
+    char* account1;
+    char* account2;
     int amount;
     bankacc * toArr;
 

@@ -35,49 +35,37 @@ void removeChar(char* name){
 }
 
 /* Deposit */
-void deposit(void* ptr){
+void deposit(void* input){
     pthread_mutex_lock(&mutex);
-    ptr = (depst*) ptr;
-    char * temp = strcpy(temp,ptr->name);
-    removeChar(temp);
-    bankacc* acc = arr[atoi(temp)];
+    depst* ptr = (depst*) input;
+    bankacc* acc = arr[atoi(ptr->account[1])];
     if(acc->depositFee !=0){
         deposit -= acc->depositFee;
-    }s
-    acc->balance += deposit;
+    }
+    acc->balance += ptr->amount;
     acc->transactionNum++;
-
     pthread_mutex_unlock(&mutex);
-
-
 }
 /*Withdraw*/
-void withdraw(void* ptr){
+void withdraw(void* input){
     pthread_mutex_lock(&mutex);
+    wthdrw* ptr = (wthdrw*) input;
 
-    char * temp = strcpy(temp,name);
-    removeChar(temp);
-    bankacc* acc = arr[atoi(temp)];
+    bankacc* acc = arr[atoi(ptr->account[1])];
     if(acc->depositFee !=0){
         withdraw += acc->withdrawFee;
     }
-    acc->balance -= withdraw;
-    acc->transactionNum++;
+    acc->balance -= ptr->
     pthread_mutex_unlock(&mutex);
 
 }
 /*transfer*/
-void transfer(void* ptr){
+void transfer(void* input){
     pthread_mutex_lock(&mutex);
+    (trnsfr*) ptr = (trnsfr*) input
 
-    char * temp1 = strcpy(temp1,name1);
-    char * temp2 = strcpy(temp2,name2);
-
-    removeChar(temp1);
-    removeChar(temp2);
-
-    bankacc* acc1 = arr[atoi(temp1)];
-    bankacc* acc2 = arr[atoi(temp2)];
+    bankacc* acc1 = arr[atoi(ptr->account1)];
+    bankacc* acc2 = arr[atoi(ptr->account2)];
     
     if(acc1->transferFee !=0){
         acc1->balance-=acc1->transferFee;
@@ -86,9 +74,9 @@ void transfer(void* ptr){
         acc2->balance-=acc2->transferFee;
     }
 
-    acc1->balance -= transfer;
+    acc1->balance -= ptr->amount;
     acc1->transactionNum++;
-    acc2->balance += transfer;
+    acc2->balance += ptr->amount;
     acc2->transactionNum++;
     pthread_mutex_unlock(&mutex);
 }
