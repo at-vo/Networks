@@ -41,7 +41,7 @@ int* countline(char *filename){
  * @brief return 1 if transfer success, 0 if failure
  * */int deposit(char*name, int dep){
     pthread_mutex_lock(&mutex);
-    bankacc * acc =  arr[atoi(name[1])];
+    bankacc * acc =  arr[atoi(name[1])-1];
     if(acc->transactionNum>acc->transactionBench){
         dep-=acc->transactionFee;
     }
@@ -61,7 +61,7 @@ int* countline(char *filename){
  * */
 int withdraw(char*name, int withdraw){
     pthread_mutex_lock(&mutex);
-    bankacc* acc = arr[atoi(name[1])];
+    bankacc* acc = arr[atoi(name[1])-1];
     if(acc->transactionNum>acc->transactionBench){
         withdraw+=acc->transactionFee;
     }
@@ -99,12 +99,38 @@ int withdraw(char*name, int withdraw){
  * */
 int transfer(char*acc1,char*acc2, int trans){
     pthread_mutex_lock(&mutex);
-    if(1==withdraw(acc1,trans) && 1==deposit(acc2,withdraw)){
-        pthread_mutex_unlock(&mutex);
-        return 1;
+    bankacc* a1 = arr[atoi(acc1[1])-1];
+    bankacc* a2 = arr[atoi(acc2[1])-1];
+
+
+    // TODO: transactions
+    if(a1->transactionNum>a1->transactionBench){
+        trans+=acc->transactionFee;
     }
+    if(acc->withdrawFee !=0){
+        withdraw += acc->withdrawFee;
+    }
+    // case when balance < 0
+    if((acc->balance-withdraw)<0){
+        if(acc->overdraftProtection==1){// if overdraft protection
+            int fee = (withdraw-acc->balance)/500;
+            fee *= acc->overdraftFee;
+            withdraw += fee;
+            if((acc->balance-withdraw)<5000){
+                pthread_mutex_unlock(&mutex);
+                return 0;
+            }
+        }
+        else{//if no protection
+            pthread_mutex_unlock(&mutex);
+            return 0;
+        }
+    }
+    // if successful withdraw
+    acc->balance-=withdraw;
+    acc->transactionNum+=1;
     pthread_mutex_unlock(&mutex);
-    return 0;
+    return 1;
 }
 /**
  * create account 
