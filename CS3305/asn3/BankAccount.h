@@ -7,6 +7,7 @@
 #define maxchar 256 // maximum buffer
 #define overlimit 5000
 #define overfee 500
+#define arrAdjust 1
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -25,7 +26,7 @@ typedef struct BankAccount
 {
     char string[maxchar];
     float balance;  
-    char * name;
+    int name;
     char * type;
     int depositFee;
     int withdrawFee;

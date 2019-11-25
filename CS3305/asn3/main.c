@@ -9,9 +9,11 @@
  * @param filename name of input file
  * @brief returns a reference to number of each account, 
  *          depositor, and client in input file
+ * @return an int array with the number of each lines 
+ *          [accounts,depositors,clients]
  * */
 int* countline(char *filename){
-    int counter[3];
+    int * counter = (int*) malloc(sizeof(int)*3);
     // char * fileout = "cpu_scheduling_output_file.txt";
     FILE * fp;
     char str[maxchar];  //max buffer
@@ -35,13 +37,37 @@ int* countline(char *filename){
 }
 
 /**
+ * removechar
+ * @param name word to be shortened
+ * @brief removes first char in the given word
+ * */
+void removeChar(char* name){
+    int idxToDel = 0; 
+    memmove(&name[idxToDel], &name[idxToDel + 1], strlen(name) - idxToDel);
+}
+
+/**
+ * make number
+ * @param token word to turn into number
+ * @brief turns a toen into a number with atoi after removing chars from it
+ * @return int of number
+ * */
+int makeNum (char* token){
+    char * temp = strcpy(temp,token);
+    removeChar(temp);
+    return atoi(temp);
+}
+
+
+/**
  * deposit
  * @param name account number
  * @param deposit amount to deposit; subject to change 
  * @brief return 1 if transfer success, 0 if failure
- * */int deposit(char*name, int dep){
+ * */
+int deposit(int name, int dep){
     pthread_mutex_lock(&mutex);
-    bankacc * acc =  arr[atoi(name[1])-1];
+    bankacc * acc =  arr[name-arrAdjust];   // adjust array to get right name
     if(acc->transactionNum>acc->transactionBench){
         dep-=acc->transactionFee;
     }
@@ -59,9 +85,9 @@ int* countline(char *filename){
  * @param withdraw amount to withdraw; subject to change 
  * @brief return 1 if transfer success, 0 if failure
  * */
-int withdraw(char*name, int withdraw){
+int withdraw(int name, int withdraw){
     pthread_mutex_lock(&mutex);
-    bankacc* acc = arr[atoi(name[1])-1];
+    bankacc* acc = arr[name-arrAdjust];
     if(acc->transactionNum>acc->transactionBench){
         withdraw+=acc->transactionFee;
     }
@@ -71,10 +97,10 @@ int withdraw(char*name, int withdraw){
     // case when balance < 0
     if((acc->balance-withdraw)<0){
         if(acc->overdraftProtection==1){// if overdraft protection
-            int fee = (withdraw-acc->balance)/500;
+            int fee = (withdraw-acc->balance)/overfee;
             fee *= acc->overdraftFee;
             withdraw += fee;
-            if((acc->balance-withdraw)<5000){
+            if((acc->balance-withdraw)<overlimit){
                 pthread_mutex_unlock(&mutex);
                 return 0;
             }
@@ -95,28 +121,27 @@ int withdraw(char*name, int withdraw){
  * @param acc1  account to withdraw from
  * @param acc2  account to deposit to
  * @param trans transaction amount
- * @brief return 1 if transfer success, 0 if failure
+ * @return 1 if transfer success, 0 if failure
  * */
-int transfer(char*acc1,char*acc2, int trans){
+int transfer(int acc1,int acc2, int trans){
     pthread_mutex_lock(&mutex);
-    bankacc* a1 = arr[atoi(acc1[1])-1];
-    bankacc* a2 = arr[atoi(acc2[1])-1];
-
-
-    // TODO: transactions
+    bankacc* a1 = arr[acc1-arrAdjust];
+    bankacc* a2 = arr[acc2-arrAdjust];
+    int init = trans; // 
+    // withdraw a1
     if(a1->transactionNum>a1->transactionBench){
-        trans+=acc->transactionFee;
+        trans+=a1->transactionFee;
     }
-    if(acc->withdrawFee !=0){
-        withdraw += acc->withdrawFee;
+    if(a1->transferFee !=0){
+        trans += a1->transferFee;
     }
-    // case when balance < 0
-    if((acc->balance-withdraw)<0){
-        if(acc->overdraftProtection==1){// if overdraft protection
-            int fee = (withdraw-acc->balance)/500;
-            fee *= acc->overdraftFee;
-            withdraw += fee;
-            if((acc->balance-withdraw)<5000){
+    // case when account1 balance < 0
+    if((a1->balance-trans)<0){
+        if(a1->overdraftProtection==1){// if overdraft protection
+            int fee = (trans-a1->balance)/overfee;
+            fee *= a1->overdraftFee;
+            trans += fee;
+            if((a1->balance-trans)<overlimit){
                 pthread_mutex_unlock(&mutex);
                 return 0;
             }
@@ -126,9 +151,21 @@ int transfer(char*acc1,char*acc2, int trans){
             return 0;
         }
     }
-    // if successful withdraw
-    acc->balance-=withdraw;
-    acc->transactionNum+=1;
+    // if successful withdraw from a1
+    a1->balance-=trans;
+    a1->transactionNum+=1;
+
+    //deposit a2
+    trans = init;
+    if(a2->transactionNum>a2->transactionBench){
+        trans-=a2->transactionFee;
+    }
+    if(a2->transferFee>0){
+        trans-= a2->depositFee;
+    }
+    a2->balance+=trans;
+    a2->transactionNum+=1;
+    
     pthread_mutex_unlock(&mutex);
     return 1;
 }
@@ -144,7 +181,6 @@ void *createAccount(void*input){
         // create account and initialize name, balance, and number of transactions
         bankacc * acc = (bankacc *) malloc (sizeof(bankacc));
         // initialize account to zero
-        acc->name = token;
         acc->balance = 0;
         acc->transactionNum = 0;
         token = strtok(NULL," "); // advance token
@@ -192,6 +228,7 @@ void *createAccount(void*input){
                 acc->overdraftProtection = 0;
             }                    
         }
+        token = strtok(NULL, " ");
     }
     return NULL;
 }
@@ -205,7 +242,8 @@ void *depositors(void*input){
     char * token = strtok(ptr->string," "); // get first word
     while(token!=NULL){
         if(strcmp(token,"d")==0){
-            char* name = strtok(NULL, " ");;
+            token = strtok(NULL, " ");
+            int name = makeNum(token);
             int dep = atoi(strtok(NULL, " "));
             deposit(name,dep);
         }
@@ -226,7 +264,8 @@ void *clients(void *input){
     while(token!=NULL){
             // deposit
         if(strcmp(token,"d")==0){
-            char* name = strtok(NULL, " ");;    // reference account number
+            token = strtok(NULL, " ");
+            int name = makeNum(token);
             int dep = atoi(strtok(NULL, " "));  // reference amount for transaction
             if(deposit(name,dep)==1) 
                 printf("successful deposit account: %s, amount: %d\n",name,dep);
@@ -234,7 +273,8 @@ void *clients(void *input){
                 printf("unsuccessful deposit account: %s, amount: %d\n",name,dep);
             // withdrawal
         }else if(strcmp(token,"w")==0){
-            char* name = strtok(NULL, " ");;
+            token = strtok(NULL, " ");
+            int name = makeNum(token);
             int with = atoi(strtok(NULL, " "));
             if(withdraw(name,with))               
                 printf("successful withdrawal account: %s, amount: %d\n",name,with);
@@ -242,8 +282,10 @@ void *clients(void *input){
                 printf("unsuccessful withdrawal");
             //transfer
         }else if(strcmp(token,"t")==0){
-            char* acc1 = strtok(NULL, " ");
-            char* acc2 = strtok(NULL, " ");;
+            token = strtok(NULL, " ");
+            int acc1 = makeNum(token);
+            token = strtok(NULL, " ");
+            int acc2 = makeNum(token);
             int trans = atoi(strtok(NULL, " "));
             if(transfer(acc1,acc2,trans)==1) 
                 printf("successful transfer account: %s, account: %s, amount: %d\n",acc1,acc2,trans);
@@ -269,17 +311,17 @@ int main()
     // create threadgroup based on largest of accounts depositors or clients
     pthread_t * threadgroup;
     if(numAccs[0]>=numAccs[1] && numAccs[0]>=numAccs[2]){
-        threadgroup = malloc(sizeof(pthread_t) * numAccs[0]); // creates threadgroup size: number of accounts
+        threadgroup = (pthread_t *) malloc(sizeof(pthread_t) * numAccs[0]); // creates threadgroup size: number of accounts
     }else if(numAccs[1]>=numAccs[2] && numAccs[1]>=numAccs[0]){
-        threadgroup = malloc(sizeof(pthread_t) * numAccs[1]); // creates threadgroup size: number of depositors
+        threadgroup = (pthread_t *) malloc(sizeof(pthread_t) * numAccs[1]); // creates threadgroup size: number of depositors
     }else{
-        threadgroup = malloc(sizeof(pthread_t) * numAccs[2]); // creates threadgroup size: number of clients
+        threadgroup = (pthread_t *) malloc(sizeof(pthread_t) * numAccs[2]); // creates threadgroup size: number of clients
     }
     // initialize array of depositors and clients
     transac * depoGroup[numAccs[1]]; 
     transac * cliGroup[numAccs[2]];
 
-    // gets line in file until end of depositors
+    // gets line in file and adds it to respective structure
     while(fgets(str,maxchar,fp)!=NULL){
         char * token = strtok(str," "); // get first word
         while (token!=NULL){
@@ -288,47 +330,49 @@ int main()
                 // create account and initialize name, balance, and number of transactions
                 bankacc * acc = (bankacc *) malloc (sizeof(bankacc));
                 // initialize account to zero
-                acc->name = token;
-                acc->balance = 0;
-                acc->transactionNum = 0;
+                acc->name = makeNum(token);
                 // add account to array
-                arr[atoi(token[1]-1)] = acc;
+                arr[acc->name-arrAdjust] = acc;
                 strcpy(acc->string,str);
             }else if (token[0]=='d'){
                 transac * tran = (transac*) malloc(sizeof(transac));// create transaction
                 strcpy(tran->string,str);   //copy string
-                depoGroup[atoi(token[3])-1] = tran;    // store in deposit group
+                char * temp = token;
+                // remove first 2 chars of token
+                for (int i = 0; i < 2; i++)
+                    removeChar(temp);
+                int name = makeNum(temp);
+                depoGroup[name-arrAdjust] = tran;    // store in deposit group
                 tran->group=threadgroup;
             }else if (token[0]=='c')
             {
                 transac * tran = (transac*) malloc(sizeof(transac));// create transaction
-                strcpy(tran->string,str);   //copy string
-                cliGroup[atoi(token[1])-1] = tran;    // store in client group
+                int name = makeNum(token);
+                cliGroup[name-arrAdjust] = tran;    // store in client group
             }
         }
     }
     // create accounts using threads
     for (int i = 0; i < numAccs[0]; i++)
-        pthread_create(&threadgroup[i],NULL,&createAccount,&arr[i]);
+        pthread_create(&threadgroup[i],NULL,createAccount,&arr[i]);
     for (int i = 0; i < numAccs[0]; i++)
-        pthread_join(&threadgroup[i],NULL);
+        pthread_join(threadgroup[i],NULL);
     // depositers using threads
     for (size_t i = 0; i < numAccs[1]; i++)
-        pthread_create(&threadgroup[i],NULL,&depositors,&depoGroup[i]);
+        pthread_create(&threadgroup[i],NULL,depositors,&depoGroup[i]);
     for (int i = 0; i < numAccs[1]; i++)
-        pthread_join(&threadgroup[i],NULL);
+        pthread_join(threadgroup[i],NULL);
     // clients using threads
     for (size_t i = 0; i < numAccs[3]; i++)
-        pthread_create(&threadgroup[i],NULL,&transfer,&cliGroup[i]);
+        pthread_create(&threadgroup[i],NULL,clients,&cliGroup[i]);
     for (int i = 0; i < numAccs[3]; i++)
-        pthread_join(&threadgroup[i],NULL);
+        pthread_join(threadgroup[i],NULL);
     
     // write to file
     char * fileout = "cpu_scheduling_output_file.txt";
     wp=fopen(fileout,"w");
     for (int i = 0; i < numAccs[0]; i++)
-        fprintf("balance for account[%d]: %d \n",atoi(arr[i]->name[1]),arr[i]->balance);
-    
+        fprintf(wp,"balance for account[%d]: %d \n",arr[i]->name,arr[i]->balance);
     // destroy mutex
     pthread_mutex_destroy(&mutex);
 

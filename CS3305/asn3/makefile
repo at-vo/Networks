@@ -1,4 +1,4 @@
-asn3.out: BankAccount.c BankAccount.h
-	gcc -v -c BankAccount.c -o asn3.out
+asn3.out: main.c BankAccount.h
+	gcc -v -pthread -c main.c -o asn3.out
 clean:
-	rm - v asn3.out assignment_3_output_file.txt
+	rm -v asn3.out assignment_3_output_file.txt
