@@ -24,8 +24,7 @@ static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 typedef struct BankAccount
 {
-    char string[maxchar];
-    float balance;  
+    int balance;  
     int name;
     char * type;
     int depositFee;
@@ -41,7 +40,7 @@ typedef struct BankAccount
 
 typedef struct transaction
 {
-    char string[maxchar];
+    char* string;
     char* account1;
     char* account2;
     int amount;
