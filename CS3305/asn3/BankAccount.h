@@ -22,6 +22,20 @@
 
 static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
+
+typedef struct nqueue{
+    TAILQ_HEAD(tailhead, qnode) head; //= TAILQ_HEAD_INITIALIZER(head);
+}nqueue;
+
+typedef struct qnode{
+    char type;
+    int amount;
+    int account1;
+    int account2;
+    TAILQ_ENTRY(qnode) pointers;
+}qnode;
+
+
 typedef struct BankAccount
 {
     int balance;  
@@ -37,16 +51,6 @@ typedef struct BankAccount
     int transactionNum;
 
 }bankacc;
-
-typedef struct transaction
-{
-    char* string;
-    char* account1;
-    char* account2;
-    int amount;
-    pthread_t * group;
-}transac;
-
 bankacc ** arr;
  
 #endif

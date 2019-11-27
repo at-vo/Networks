@@ -186,41 +186,16 @@ int transfer(int acc1,int acc2, int trans){
  *          or transfer on specific account
  * */
 void *clients(void *input){
-    transac*ptr = (transac*) input;
-    char * token = strtok(ptr->string," "); // get first word
-    while(token!=NULL){
-        token = strtok(NULL, " ");
-            // deposit
-        if(token[0]=='d'){
-            token = strtok(NULL, " ");
-            int name = makeNum(token);
-            int dep = atoi(strtok(NULL, " "));  // reference amount for transaction
-            if(deposit(name,dep)==1) 
-                printf("successful deposit account: %s, amount: %d\n",name,dep);
-            else 
-                printf("unsuccessful deposit account: %s, amount: %d\n",name,dep);
-            // withdrawal
-        }else if(token[0]=='w'){
-            token = strtok(NULL, " ");
-            int name = makeNum(token);
-            int with = atoi(strtok(NULL, " "));
-            if(withdraw(name,with)==1)               
-                printf("successful withdrawal account: %s, amount: %d\n",name,with);
-            else 
-                printf("unsuccessful withdrawal");
-            //transfer
-        }else if(token[0]=='t'){
-            token = strtok(NULL, " ");
-            int acc1 = makeNum(token);
-            token = strtok(NULL, " ");
-            int acc2 = makeNum(token);
-            int trans = atoi(strtok(NULL, " "));
-            if(transfer(acc1,acc2,trans)==1) 
-                printf("successful transfer account: %s, account: %s, amount: %d\n",acc1,acc2,trans);
-            else 
-                printf("unsuccessful transfer account: %s, account: %s, amount: %d\n",acc1,acc2,trans);
+    nqueue* ptr = (nqueue*)input;
+    qnode * np;
+    TAILQ_FOREACH(np,&ptr->head,pointers){
+        if(np->type=='d'){
+            deposit(np->account1,np->amount);
+        }else if(np->type=='w'){
+            withdraw(np->account1,np->amount);
+        }else if(np->type=='t'){
+            transfer(np->account1,np->account2 ,np->amount);
         }
-        token = strtok(NULL, " ");  //get next word
     }
 }
 
@@ -239,7 +214,9 @@ int main(int argc, char *argv[])
     // create threadgroup based on clients
     pthread_t threadgroup[numAccs[2]];
     // initialize array of clients
-    transac * cliGroup[numAccs[2]];
+    nqueue * cliGroup[numAccs[2]];
+
+    
     char * zzz;
     // gets line in file and adds it to respective structure
     while(fgets(str,maxchar,fp)!=NULL){
@@ -316,18 +293,47 @@ int main(int argc, char *argv[])
             }
         // client creation
         }else if (token[0]=='c'){
-            transac * tran = (transac*) malloc(sizeof(transac));// create transaction
-            tran->string = (char*) malloc(sizeof(zzz));
-            strcpy(tran->string,zzz);   //copy string
-            int name = makeNum(token);
-            cliGroup[name-arrAdjust] = tran;    // store in client group
+            nqueue que;
+            TAILQ_INIT(&que.head);
+            char* account = (char*) malloc(sizeof(token));
+            strcpy(account,token);
+            token = strtok(NULL, " ");
+            if(token[0]=='d'){
+                qnode*node = (qnode*) malloc(sizeof(qnode));
+                node->type = token[0];
+                token = strtok(NULL, " ");
+                node->account1 = makeNum(token);
+                node->amount = atoi(strtok(NULL, " "));
+                TAILQ_INSERT_TAIL(&que.head,node,pointers);
+            }else if(token[0]=='w'){
+                qnode*node = (qnode*) malloc(sizeof(qnode));
+                node->type = token[0];
+                token = strtok(NULL, " ");
+                node->account1 = makeNum(token);
+                node->amount = atoi(strtok(NULL, " "));
+                TAILQ_INSERT_TAIL(&que.head,node,pointers);
+            }else if(token[0]=='t'){
+                qnode*node = (qnode*) malloc(sizeof(qnode));
+                node->type = token[0];
+                token = strtok(NULL, " ");
+                node->account1 = makeNum(token);
+                token = strtok(NULL, " ");
+                node->account2 = makeNum(token);
+                node->amount = atoi(strtok(NULL, " "));
+                TAILQ_INSERT_TAIL(&que.head,node,pointers);
+            }
+            int num = makeNum(account);
+            cliGroup[num];
         }
         free(zzz);
     }
-
-    // clients using threads
+    fclose(fp);
+    //clients using threads
     for (size_t i = 0; i < numAccs[2]; i++){
-        pthread_create(&threadgroup[i],NULL,clients,(void*) &cliGroup[i]);
+        if(pthread_create(&threadgroup[i],NULL,clients,(void *)cliGroup[i])!=0){
+            printf("thread not created");
+            exit(1);
+        }
     }
     for (int i = 0; i < numAccs[2]; i++){
         pthread_join(threadgroup[i],NULL);
@@ -339,8 +345,18 @@ int main(int argc, char *argv[])
     for (int i = 0; i < numAccs[0]; i++)
         fprintf(wp,"balance for account[%d]: %d \n",arr[i]->name,arr[i]->balance);
 
-    // destroy mutex
+    // destroy mutex & queues
     pthread_mutex_destroy(&mutex);
+    for (int i = 0; i < numAccs[2]; i++)
+    {
+        while (!TAILQ_EMPTY(&cliGroup[i]->head)) {
+            qnode* n1;
+            n1 = TAILQ_FIRST(&cliGroup[i]->head);
+            TAILQ_REMOVE(&cliGroup[i]->head, n1, pointers);
+            free(n1);
+        }
+    }
+    
 
     return 0;
 }
