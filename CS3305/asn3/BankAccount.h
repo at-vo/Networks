@@ -4,10 +4,10 @@
  * */
 #ifndef BANKACCOUNT_H
 #define BANKACCOUNT_H
+#define arrAdjust 1
 #define maxchar 256 // maximum buffer
 #define overlimit 5000
 #define overfee 500
-#define arrAdjust 1
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -21,20 +21,6 @@
 #include <string.h>
 
 static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-
-
-typedef struct nqueue{
-    TAILQ_HEAD(tailhead, qnode) head; //= TAILQ_HEAD_INITIALIZER(head);
-}nqueue;
-
-typedef struct qnode{
-    char type;
-    int amount;
-    int account1;
-    int account2;
-    TAILQ_ENTRY(qnode) pointers;
-}qnode;
-
 
 typedef struct BankAccount
 {
@@ -51,6 +37,16 @@ typedef struct BankAccount
     int transactionNum;
 
 }bankacc;
+
+// typedef struct transaction
+// {
+//     char string[maxchar];
+//     char* account1;
+//     char* account2;
+//     int amount;
+//     pthread_t * group;
+// }transac;
+
 bankacc ** arr;
  
 #endif
