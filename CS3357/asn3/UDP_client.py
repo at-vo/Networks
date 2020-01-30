@@ -51,7 +51,7 @@ def main():
                     if response_ack!=ack:
                         if (response_seq != seq):
                             sock.sendto(UDP_Packet, (UDP_IP, UDP_PORT)) # send packet again
-                            print("packet resent:", UDP_Packet)
+                            print("packet resent:",UDP_Packet)
                         else:
                             break
                 else:
