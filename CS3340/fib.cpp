@@ -16,8 +16,6 @@ double Fib(int num){
 int main(){
 	for (int i = 0; i <= 10; i++)
 	{
-		std::cout << "fibonachi of "<< i*5<<" is "<< Fib(i*5) << std::endl;
+		std::cout << "fibonachi at "<< i*5<<" is "<< Fib(i*5) << std::endl;
 	}
-	
-	
 }

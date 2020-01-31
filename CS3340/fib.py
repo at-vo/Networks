@@ -1,34 +1,34 @@
-# def fib(n):
-#     if (n==1):
-#         return 1
-#     elif (n==0):
-#         return 0
-#     return fib(n-1)+fib(n-2)
+'''
+Dat Vo 
+250983323
+'''
 
-# for i in range(0,11):
-#     print(fib(i*5))
-
-
-# def fibB(n):
-#     arr=[0,1]
-#     for i in range(2,n+1):
-#         arr.append(arr[i-1]+arr[i-2])
-#     return arr
-# for i in range(0,31):
-#     z = fibB(i*10)
-#     print("fibonacci for %d is %d "%(i*10, z[i*10]))
-
-
+'''Part A'''
 def fib(n):
-    if (n==1):
+    if (n==1):                  # base case =1 
         return 1
-    elif (n==0):
+    elif (n==0):                # base case =10
         return 0
-    a = fib(n-1)
-    b = fib(n-2)
-    c=a+b
-    return c
+    return fib(n-1)+fib(n-2)    #return current frame 
+# function call
+for i in range(0,11):
+    at = fib(i*5)               # every 5 fibonaccis
+    print("fibonacci at %d is %d"%(i*5,at))
 
+'''Part B'''
+def fibonacci(n,fib):
+    if (n==1):                  # base case =1 
+        return [0,1]
+    elif(n==0):                 # base case =0
+        return [0,0]
+    fib = fibonacci(n-1,fib)    # decrease n and call again
+    nextFib = fib[0]+fib[1]     # add fibonacci 
+    fib[0]=fib[1]               # assign last fibonacci
+    fib[1] = nextFib            # assign next fibonacci
+    return fib
+
+# function call
 for i in range(0,31):
-    a = fib(i*10)
-    print("fibonacci for %d is %d "%(i*10, a))
+    fib = [0,0]
+    fib = fibonacci(i*10,fib)   # every 10 fibonaccis
+    print("fibonacci at %d is %d"%(i*10,fib[1]))

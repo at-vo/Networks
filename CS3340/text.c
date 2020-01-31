@@ -11,7 +11,7 @@ Merge(int * A,int p,int q,int r){
 	for (int i = 0; i < n2; ++i)
 		R[i] = A[q+i];
 
-	L[n1+1] = float(inf);
+	L[n1+1] = 100000000000000000;
 	R[n2+1] = float(inf);
 	int i = 0;
 	int j = 0;
