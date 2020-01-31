@@ -25,7 +25,6 @@ int main(){
 	{
 		double *arr = new double[2];
 		arr = fibonacci(i*10,arr);
-		std::cout << "Part A"<<std::endl;
 		std::cout << "fibonachi at "<< i*10<<" is "<< std::setprecision(100) << arr[1] << std::endl;
 		free(arr);
 	}
