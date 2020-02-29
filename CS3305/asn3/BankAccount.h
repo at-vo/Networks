@@ -25,7 +25,7 @@ typedef struct BankAccount
 {
     char string[maxchar];
     float balance;  
-    char * name;
+    int name;
     char * type;
     int depositFee;
     int withdrawFee;
@@ -41,8 +41,8 @@ typedef struct BankAccount
 typedef struct transaction
 {
     char string[maxchar];
-    char* account1;
-    char* account2;
+    int account1;
+    int account2;
     int amount;
     pthread_t * group;
 }transac;

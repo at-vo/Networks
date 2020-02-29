@@ -4,6 +4,17 @@
  * */
 #include "BankAccount.h"
 
+
+/**
+ * remove char
+ * @param name the specified word
+ * @brief 
+ * */
+void removeChar(char* name){
+    int idxToDel = 0; 
+    memmove(&name[idxToDel], &name[idxToDel + 1], strlen(name) - idxToDel);
+}
+
 /**
  * countline
  * @param filename name of input file
@@ -11,7 +22,7 @@
  *          depositor, and client in input file
  * */
 int* countline(char *filename){
-    int counter[3];
+    int* counter = (int *) malloc(sizeof(int)*3);
     // char * fileout = "cpu_scheduling_output_file.txt";
     FILE * fp;
     char str[maxchar];  //max buffer
@@ -41,7 +52,7 @@ int* countline(char *filename){
  * @brief return 1 if transfer success, 0 if failure
  * */int deposit(char*name, int dep){
     pthread_mutex_lock(&mutex);
-    bankacc * acc =  arr[atoi(name[1])-1];
+    bankacc * acc =  arr[(int)atoi(name[1])-1];
     if(acc->transactionNum>acc->transactionBench){
         dep-=acc->transactionFee;
     }
@@ -144,7 +155,10 @@ void *createAccount(void*input){
         // create account and initialize name, balance, and number of transactions
         bankacc * acc = (bankacc *) malloc (sizeof(bankacc));
         // initialize account to zero
-        acc->name = token;
+        char * temp = strcpy(temp,token);
+        removeChar(temp);
+        int num = atoi(temp);        
+        acc->name = num;
         acc->balance = 0;
         acc->transactionNum = 0;
         token = strtok(NULL," "); // advance token
@@ -205,7 +219,11 @@ void *depositors(void*input){
     char * token = strtok(ptr->string," "); // get first word
     while(token!=NULL){
         if(strcmp(token,"d")==0){
-            char* name = strtok(NULL, " ");;
+            token = strtok(NULL, " ");
+            char * temp = strcpy(temp,token)
+            removeChar(temp);
+            int num = atoi(temp);        
+            acc->name = num;
             int dep = atoi(strtok(NULL, " "));
             deposit(name,dep);
         }
@@ -268,11 +286,11 @@ int main()
     }
     // create threadgroup based on largest of accounts depositors or clients
     pthread_t * threadgroup;
-    if(numAccs[0]>=numAccs[1] && numAccs[0]>=numAccs[2]){
+    if(numAccs[0]>=numAccs[1] && numAccs[0]>=numAccs[2]){   // if accounts is greatest
         threadgroup = malloc(sizeof(pthread_t) * numAccs[0]); // creates threadgroup size: number of accounts
-    }else if(numAccs[1]>=numAccs[2] && numAccs[1]>=numAccs[0]){
+    }else if(numAccs[1]>=numAccs[2] && numAccs[1]>=numAccs[0]){ // if depositors is greatest
         threadgroup = malloc(sizeof(pthread_t) * numAccs[1]); // creates threadgroup size: number of depositors
-    }else{
+    }else{  // if clients is greatest
         threadgroup = malloc(sizeof(pthread_t) * numAccs[2]); // creates threadgroup size: number of clients
     }
     // initialize array of depositors and clients
@@ -288,6 +306,8 @@ int main()
                 // create account and initialize name, balance, and number of transactions
                 bankacc * acc = (bankacc *) malloc (sizeof(bankacc));
                 // initialize account to zero
+                char * temp = strcpy(temp,token);
+                removeChar(temp);
                 acc->name = token;
                 acc->balance = 0;
                 acc->transactionNum = 0;
