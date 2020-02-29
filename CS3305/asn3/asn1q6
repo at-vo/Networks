@@ -1,0 +1,250 @@
+Script started on 2020-01-31 15:20:57-05:00 [TERM="xterm-256color" TTY="/dev/pts/2" COLUMNS="191" LINES="45"]
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m ^C
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m ^C
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m ^C
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m ^C
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m sh /tmp/Microsoft-MIEngine-Cmd-6djs2l02.29z [Ksh /tmp/Microsoft-MIEngine-Cmd-6djs2l02.29z cript [Kenv sh /tmp/Microsoft-MIEngine-Cmd-jjpxjpyz.2nx script [K[1P [1P [1P [1P [1P [1P [K[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m  m [1P m a k e   a l l 
+asn1_a asn1_b
+make: asn1_a: Command not found
+make: *** [makefile:2: all] Error 127
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m make all    sn1_a
+g++ -v asn1_a.cpp -o asn1_a.o
+Using built-in specs.
+COLLECT_GCC=g++
+COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/lto-wrapper
+Target: x86_64-pc-linux-gnu
+Configured with: /build/gcc/src/gcc/configure --prefix=/usr --libdir=/usr/lib --libexecdir=/usr/lib --mandir=/usr/share/man --infodir=/usr/share/info --with-bugurl=https://bugs.archlinux.org/ --enable-languages=c,c++,ada,fortran,go,lto,objc,obj-c++,d --enable-shared --enable-threads=posix --with-system-zlib --with-isl --enable-__cxa_atexit --disable-libunwind-exceptions --enable-clocale=gnu --disable-libstdcxx-pch --disable-libssp --enable-gnu-unique-object --enable-linker-build-id --enable-lto --enable-plugin --enable-install-libiberty --with-linker-hash-style=gnu --enable-gnu-indirect-function --enable-multilib --disable-werror --enable-checking=release --enable-default-pie --enable-default-ssp --enable-cet=auto gdc_include_dir=/usr/include/dlang/gdc
+Thread model: posix
+gcc version 9.2.0 (GCC) 
+COLLECT_GCC_OPTIONS='-v' '-o' 'asn1_a.o' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ /usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/cc1plus -quiet -v -D_GNU_SOURCE asn1_a.cpp -quiet -dumpbase asn1_a.cpp -mtune=generic -march=x86-64 -auxbase asn1_a -version -o /tmp/ccXaOw8w.s
+GNU C++14 (GCC) version 9.2.0 (x86_64-pc-linux-gnu)
+	compiled by GNU C version 9.2.0, GMP version 6.1.2, MPFR version 4.0.2, MPC version 1.1.0, isl version isl-0.21-GMP
+
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring nonexistent directory "/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../x86_64-pc-linux-gnu/include"
+#include "..." search starts here:
+#include <...> search starts here:
+ /usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0
+ /usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/x86_64-pc-linux-gnu
+ /usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../include/c++/9.2.0/backward
+ /usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include
+ /usr/local/include
+ /usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/include-fixed
+ /usr/include
+End of search list.
+GNU C++14 (GCC) version 9.2.0 (x86_64-pc-linux-gnu)
+	compiled by GNU C version 9.2.0, GMP version 6.1.2, MPFR version 4.0.2, MPC version 1.1.0, isl version isl-0.21-GMP
+
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+Compiler executable checksum: e70628160ff7c7e477f7d9570e6637cb
+COLLECT_GCC_OPTIONS='-v' '-o' 'asn1_a.o' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ as -v --64 -o /tmp/cc7FMIgw.o /tmp/ccXaOw8w.s
+GNU assembler version 2.33.1 (x86_64-pc-linux-gnu) using BFD version (GNU Binutils) 2.33.1
+COMPILER_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/:/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/:/usr/lib/gcc/x86_64-pc-linux-gnu/:/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/:/usr/lib/gcc/x86_64-pc-linux-gnu/
+LIBRARY_PATH=/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/:/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../lib/:/lib/../lib/:/usr/lib/../lib/:/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS='-v' '-o' 'asn1_a.o' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+ /usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/collect2 -plugin /usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/liblto_plugin.so -plugin-opt=/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/lto-wrapper -plugin-opt=-fresolution=/tmp/cckK8IHv.res -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc -plugin-opt=-pass-through=-lc -plugin-opt=-pass-through=-lgcc_s -plugin-opt=-pass-through=-lgcc --build-id --eh-frame-hdr --hash-style=gnu -m elf_x86_64 -dynamic-linker /lib64/ld-linux-x86-64.so.2 -pie -o asn1_a.o /usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../lib/Scrt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../lib/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/crtbeginS.o -L/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0 -L/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../lib -L/lib/../lib -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../.. /tmp/cc7FMIgw.o -lstdc++ -lm -lgcc_s -lgcc -lc -lgcc_s -lgcc /usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/crtendS.o /usr/lib/gcc/x86_64-pc-linux-gnu/9.2.0/../../../../lib/crtn.o
+COLLECT_GCC_OPTIONS='-v' '-o' 'asn1_a.o' '-shared-libgcc' '-mtune=generic' '-march=x86-64'
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m make asn1_a
+g++ asn1_a.cpp -o asn1_a.o
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m make asn1_a b
+g++ asn1_b.cpp -o asn1_b.o
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m c make clean
+rm *.o 
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m ./asn1_a
+bash: ./asn1_a: No such file or directory
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m make clean
+rm *.o 
+rm: cannot remove '*.o': No such file or directory
+make: *** [makefile:10: clean] Error 1
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m make asn1_a
+g++ -c asn1_a.cpp -o asn1_a.o
+g++ asn1_a
+[01m[Kg++:[m[K [01;31m[Kerror: [m[Kasn1_a: No such file or directory
+[01m[Kg++:[m[K [01;31m[Kfatal error: [m[Kno input files
+compilation terminated.
+make: *** [makefile:2: asn1_a] Error 1
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m make asn1_a
+g++ asn1_a.o -o asn1_a
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m make asn1_a b
+g++ -c asn1_b.cpp
+g++ asn1_b.o -o asn1_b
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m make clean
+rm *.o 
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m make cleanasn1_b
+g++ -c asn1_b.cpp
+g++ asn1_b.o -o asn1_b
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m make asn1_b[1Pcleanasn1_b
+make: 'asn1_b' is up to date.
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m make asn1_b[1Pcleanasn1_ba
+g++ -c asn1_a.cpp
+g++ asn1_a.o -o asn1_a
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m ./asn1_a
+Part A
+fibonacci at 0is0
+Part A
+fibonacci at 5is5
+Part A
+fibonacci at 10is55
+Part A
+fibonacci at 15is610
+Part A
+fibonacci at 20is6765
+Part A
+fibonacci at 25is75025
+Part A
+fibonacci at 30is832040
+Part A
+fibonacci at 35is9227465
+Part A
+fibonacci at 40is102334155
+Part A
+^C
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m make all
+g++ -c asn1_a.cpp
+g++ asn1_a.o -o asn1_a
+g++ -c asn1_b.cpp
+g++ asn1_b.o -o asn1_b
+asn1_a asn1_b
+make: asn1_a: Command not found
+make: *** [makefile:2: all] Error 127
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m make all
+make: Nothing to be done for 'all'.
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m make all
+make: Nothing to be done for 'all'.
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m make all
+asn1_a asn1_b
+make: asn1_a: Command not found
+make: *** [makefile:2: all] Error 127
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m make clean
+rm *.o
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m make clean
+rm *.o
+rm: cannot remove '*.o': No such file or directory
+make: *** [makefile:13: clean] Error 1
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m make clean[2Pall
+asn1_a asn1_b
+make: asn1_a: Command not found
+make: *** [makefile:2: all] Error 127
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m make all
+g++ -c asn1_a.cpp
+g++ asn1_a.o -o asn1_a
+g++ -c asn1_b.cpp
+g++ asn1_b.o -o asn1_b
+asn1_a asn1_b
+make: asn1_a: Command not found
+make: *** [makefile:2: all] Error 127
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m make all
+make: *** No rule to make target 'all'.  Stop.
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m make allclean[2Pallclean[2Pall[Kclear
+[3J[H[2J]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m clear
+[3J[H[2J]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m clearmake allclean[2Pall./asn1_a[3@make asn1_aba
+make: 'asn1_a' is up to date.
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m make asn1_a b
+make: 'asn1_b' is up to date.
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m script
+Script started, file is typescript
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m ./asn1_b
+fibonachi at 0 is 0
+fibonachi at 10 is 55
+fibonachi at 20 is 6765
+fibonachi at 30 is 832040
+fibonachi at 40 is 102334155
+fibonachi at 50 is 12586269025
+fibonachi at 60 is 1548008755920
+fibonachi at 70 is 190392490709135
+fibonachi at 80 is 23416728348467684
+fibonachi at 90 is 2880067194370816000
+fibonachi at 100 is 354224848179261997056
+fibonachi at 110 is 43566776258854857474048
+fibonachi at 120 is 5358359254990968359747584
+fibonachi at 130 is 659034621587630097925406720
+fibonachi at 140 is 81055900096023528086683254784
+fibonachi at 150 is 9969216677189304526037969797120
+fibonachi at 160 is 1226132595394188680204060037480448
+fibonachi at 170 is 150804340016807994601833512447246336
+fibonachi at 180 is 18547707689471988916184556297301000192
+fibonachi at 190 is 2281217241465037484553641151930180829184
+fibonachi at 200 is 280571172992510158789853658433108939112448
+fibonachi at 210 is 34507973060837280675577476548217878314221568
+fibonachi at 220 is 4244200115309992665927172499589207616049381376
+fibonachi at 230 is 522002106210068245272958392677067389047022813184
+fibonachi at 240 is 64202014863723079434260884973087623346749416931328
+fibonachi at 250 is 7896325826131727506236816023580005726635406431092736
+fibonachi at 260 is 971183874599338764985376407301548345514986849806843904
+fibonachi at 270 is 119447720249892546555556876969231948173201671228932227072
+fibonachi at 280 is 14691098406862181955785513480640570995380644184160720650240
+fibonachi at 290 is 1806885656323798121011001970735901878257157428810434142535680
+fibonachi at 300 is 222232244629420346838163627942524289433543944298387859199492096
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m exo iut  t
+exit
+Script done, file is typescript
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m scriptmake asn1_b[5Pscript
+Script started, file is typescript
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m exit./asn1_bsh /tmp/Microsoft-MIEngine-Cmd-6djs2l02.29z cript [Kenv sh /tmp/Microsoft-MIEngine-Cmd-jjpxjpyz.2nx 3cyrhhj2.587 v6cfaf5p.n1y 3cyrhhj2.587 jjpxjpyz.2nx script [Kh /tmp/Microsoft-MIEngine-Cmd-6djs2l02.29z ./asn1_b[K a
+fibonacci at 0is0
+fibonacci at 5is5
+fibonacci at 10is55
+fibonacci at 15is610
+fibonacci at 20is6765
+fibonacci at 25is75025
+fibonacci at 30is832040
+fibonacci at 35is9227465
+fibonacci at 40is102334155
+^C
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m make    exit
+exit
+Script done, file is typescript
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m scriptmake asn1_ba
+g++ -c asn1_a.cpp
+g++ asn1_a.o -o asn1_a
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m make asn1_a[5Pscriptmake asn1_a b
+make: 'asn1_b' is up to date.
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m script
+Script started, file is typescript
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m ./asn1_a
+fibonacci at 0 is 0
+fibonacci at 5 is 5
+fibonacci at 10 is 55
+fibonacci at 15 is 610
+fibonacci at 20 is 6765
+fibonacci at 25 is 75025
+fibonacci at 30 is 832040
+fibonacci at 35 is 9227465
+fibonacci at 40 is 102334155
+fibonacci at 45 is 1134903170
+fibonacci at 50 is 12586269025
+]0;dvo@Saltimachine:~/Project/School/CS3340[01;32m[dvo@Saltimachine[01;37m CS3340[01;32m]$[00m ./asn1_a[4Pexit./asn1_a[4Pexit./asn1_b
+fibonachi at 0 is 0
+fibonachi at 10 is 55
+fibonachi at 20 is 6765
+fibonachi at 30 is 832040
+fibonachi at 40 is 102334155
+fibonachi at 50 is 12586269025
+fibonachi at 60 is 1548008755920
+fibonachi at 70 is 190392490709135
+fibonachi at 80 is 23416728348467684
+fibonachi at 90 is 2880067194370816000
+fibonachi at 100 is 354224848179261997056
+fibonachi at 110 is 43566776258854857474048
+fibonachi at 120 is 5358359254990968359747584
+fibonachi at 130 is 659034621587630097925406720
+fibonachi at 140 is 81055900096023528086683254784
+fibonachi at 150 is 9969216677189304526037969797120
+fibonachi at 160 is 1226132595394188680204060037480448
+fibonachi at 170 is 150804340016807994601833512447246336
+fibonachi at 180 is 18547707689471988916184556297301000192
+fibonachi at 190 is 2281217241465037484553641151930180829184
+fibonachi at 200 is 280571172992510158789853658433108939112448
+fibonachi at 210 is 34507973060837280675577476548217878314221568
+fibonachi at 220 is 4244200115309992665927172499589207616049381376
+fibonachi at 230 is 522002106210068245272958392677067389047022813184
+fibonachi at 240 is 64202014863723079434260884973087623346749416931328
+fibonachi at 250 is 7896325826131727506236816023580005726635406431092736
+fibonachi at 260 is 971183874599338764985376407301548345514986849806843904
+fibonachi at 270 is 119447720249892546555556876969231948173201671228932227072
+fibonachi at 280 is 14691098406862181955785513480640570995380644184160720650240
+fibonachi at 290 is 1806885656323798121011001970735901878257157428810434142535680
+fibonachi at 300 is 222232244629420346838163627942524289433543944298387859199492096
+]0;dvo@Saltimachin
