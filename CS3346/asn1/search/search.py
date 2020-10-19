@@ -87,16 +87,84 @@ def depthFirstSearch(problem):
     print("Start's successors:", problem.getSuccessors(problem.getStartState()))
     """
     "*** YOUR CODE HERE ***"
+    # for clear reference to items returned by succesors 
+    nextState, nextAction, nextCost = 0, 1, 2
+    # init lists
+    visited = []
+    stack = util.Stack()
+    # assign current to start, the actions container, and the cost 
+    current = problem.getStartState()
+    container = []
+    # push start
+    stack.push((current,container))
+    while not stack.isEmpty():
+        # return actions if goal found
+        if (problem.isGoalState(current)):
+            return container
+        
+        if current not in visited:
+            # visit if unvisited
+            visited.append(current)
+            # add each successor 
+            for successor in problem.getSuccessors(current):
+                stack.push((successor[nextState],container + [successor[nextAction]]))
+        current, container = stack.pop()
     util.raiseNotDefined()
-
 def breadthFirstSearch(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    #    # for clear reference to items returned by succesors 
 
+    # for clear reference to items returned by succesors 
+    nextState, nextAction, nextCost = 0, 1, 2
+    # init lists
+    visited = []
+    queue = util.Queue()
+    # assign current to start, the actions container, and the cost 
+    current = problem.getStartState()
+    container = []
+    # push start
+    queue.push((current,container))
+    while not queue.isEmpty():
+        current, container = queue.pop()
+
+        # return actions if goal found
+        if (problem.isGoalState(current)):
+            return container
+        # add each successor 
+        if current not in visited:
+            visited.append(current)
+            for successor in problem.getSuccessors(current):
+                queue.push((successor[nextState],container + [successor[nextAction]]))
+        
 def uniformCostSearch(problem):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
+    # print("Start:", problem.getStartState())
+    # print("Is the start a goal?", problem.isGoalState(problem.getStartState()))
+    # print("Start's successors:", problem.getSuccessors(problem.getStartState()))
+    
+    nextState, nextAction, nextCost = 0, 1, 2
+    visited = []
+    # use priority queue this time
+    queue = util.PriorityQueue()
+    current = problem.getStartState()
+    # add total cost variable
+    totalCost = 0
+    container = []
+    # add total cost variable to visited and queue
+    queue.push((current,container),totalCost)
+    while not queue.isEmpty():
+        current, container = queue.pop()
+        if (problem.isGoalState(current)):
+                return container
+        if current not in visited:
+            for succesor in problem.getSuccessors(current):
+                # push the new action cost
+                newAction = container + [succesor[nextAction]]
+                queue.push((succesor[nextState], newAction), problem.getCostOfActions(newAction))
+        visited.append(current)     
+    return container
     util.raiseNotDefined()
 
 def nullHeuristic(state, problem=None):
@@ -109,7 +177,30 @@ def nullHeuristic(state, problem=None):
 def aStarSearch(problem, heuristic=nullHeuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
     "*** YOUR CODE HERE ***"
+    nextState, nextAction, nextCost = 0, 1, 2
+    visited = []
+    queue = util.PriorityQueue()
+    current = problem.getStartState()
+    # add total cost variable
+    totalCost = 0
+    container = []
+    # add total cost variable to visited and queue
+    queue.push((current,container), totalCost)
+    while not queue.isEmpty():
+        current, container = queue.pop()
+        if problem.isGoalState(current):
+                return container
+        if current not in visited:
+            for succesor in problem.getSuccessors(current):
+                if succesor[nextState] not in visited: 
+                    newAction = container + [succesor[nextAction]]
+                    # add a total cost to UCS from above that takes into account the heuristic
+                    totalCost = problem.getCostOfActions(newAction) + heuristic(succesor[nextState],problem)
+                    queue.push((succesor[nextState], newAction), totalCost)
+        visited.append(current)     
+    return container
     util.raiseNotDefined()
+    
 
 
 # Abbreviations
