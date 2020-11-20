@@ -80,6 +80,7 @@ class ReflexAgent(Agent):
         # print("ghstates:",newGhostStates)
         #print("scareTime:",newScaredTimes)
         
+        # define variables
         high = float('inf')
         low = -high
         newFoodList = newFood.asList()
@@ -87,30 +88,38 @@ class ReflexAgent(Agent):
         toReturn = 0
         
         #print("foodlist: ",newFoodList)
-        # if action == "Stop":
-        #     return low
+        # make it go if pacman stops
+        if action == "Stop":
+            return low
+
+        # find the lowest food distance using manhattan
         for pos in newFoodList:
             dist = manhattanDistance(newPos,pos)
             if dist < nextFood:
                 nextFood = dist 
         # ghostPos = currentGameState.getGhostPositions()
-        #print(nextFood)
-        for time in newScaredTimes:
-            if time > 0:
-                nextFood += 2
+        # print(nextFood)
+
+        # make food a higher priority if on scared timer
+        # for time in newScaredTimes:
+        #     if time > 0:
+        #         nextFood += 2
         minGhostPos = high
         for ghost in newGhostStates:
             currGhostPos = manhattanDistance(newPos,ghost.getPosition())
             if currGhostPos < minGhostPos:
                 minGhostPos = currGhostPos
         #print(minGhostPos)
+        # make pacman run away from ghost
         if minGhostPos < 2:
+            #print("oh no!")
             return low
-        
+        # take the reciprocal of the good value
         toReturn = 1/nextFood
         # print("succscore:", successorGameState.getScore())
         # print("currscore:", currentGameState.getScore())
-        diffScore = successorGameState.getScore() + currentGameState.getScore()
+
+        diffScore = successorGameState.getScore() - currentGameState.getScore()
         #print("diffScore: ",diffScore)
         toReturn += diffScore
         
@@ -173,7 +182,51 @@ class MinimaxAgent(MultiAgentSearchAgent):
             Returns the total number of agents in the game
         """
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        
+        # define a recursive call for minMax comparison
+        def minMaxFunction(gameState, agentIndex, depth):
+            # common return for win/lose or specified depth
+            if gameState.isWin() or gameState.isLose() or depth == self.depth:
+                return self.evaluationFunction(gameState)
+            # maximize pacman position
+            if agentIndex == 0:
+                # assign lowest value to compare to first
+                toReturn = float('-inf')
+                # find the highest value for the current depth and index
+                for state in gameState.getLegalActions(agentIndex):
+                    minMax = minMaxFunction(gameState.generateSuccessor(agentIndex,state),1,depth)
+                    # check max
+                    if minMax > toReturn:
+                        toReturn = minMax
+                return toReturn
+
+            # minimize ghost positions
+            else:
+                # # check next index
+                nextIndex = agentIndex + 1
+                if gameState.getNumAgents() == nextIndex:
+                    nextIndex = 0
+                if nextIndex == 0:
+                   depth += 1
+                # do same as max but for min
+                toReturn = float('inf')
+                for state in gameState.getLegalActions(agentIndex):
+                    minMax = minMaxFunction(gameState.generateSuccessor(agentIndex,state),nextIndex,depth)
+                    if minMax < toReturn:
+                        toReturn = minMax
+                return toReturn
+        # evaluate pacman position at root as a maximum
+        toReturn = 0
+        maxValue = float('-inf')
+        # for initial action
+        for state in gameState.getLegalActions(0):
+            minMax = minMaxFunction(gameState.generateSuccessor(0,state), 1, 0)
+            # find minimum value and then set toReturn to min
+            if minMax > maxValue:
+                maxValue = minMax
+                toReturn = state
+        return toReturn
+        
 
 
 class AlphaBetaAgent(MultiAgentSearchAgent):

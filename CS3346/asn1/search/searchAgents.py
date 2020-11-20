@@ -498,7 +498,49 @@ def foodHeuristic(state, problem):
     """
     position, foodGrid = state
     "*** YOUR CODE HERE ***"
-    return 0
+    grid = foodGrid.asList()
+    #print(grid)
+    # grid empty then return 0
+    if not grid:
+        return 0
+    # deal with grid of length 1
+    if len(grid) == 1:
+        #print(position, grid)
+        pos0 = abs(position[0] - grid[0][0])
+        pos1 = abs(position[1] - grid[0][1])
+        return pos0 + pos1
+    # deal grid with grid length > 1
+    # initialize variables
+    cost = 0
+    costList = []
+    # using max values for comparison
+    minCost = float('inf')
+    maxCost = float('-inf')
+    # find minCost position in costList that coincides with grid position
+    for coord in grid:
+        pos0 = abs(position[0] - coord[0])
+        pos1 = abs(position[1] - coord[1])
+        cost = pos0 + pos1
+        costList.append(cost)
+        # search for lowest cost
+        if cost < minCost:
+            minCost = cost
+    minPos = grid[costList.index(minCost)]
+    # clear list then do the same as minCost position for maxCost
+    # compare with minPos found earlier
+    costList.clear()
+    for coord in grid:
+        pos0 = abs(minPos[0] - coord[0])
+        pos1 = abs(minPos[1] - coord[1])
+        cost = pos0 + pos1
+        costList.append(cost)
+        if cost > maxCost:
+            maxCost = cost
+    maxPos = grid[costList.index(maxCost)]
+    # calculate the minMax position to return 
+    minMax = abs(minPos[0] - maxPos[0]) + abs(minPos[1] - maxPos[1])
+    minMaxPos = abs(position[0] - minPos[0]) + abs(position[1] - minPos[1])
+    return minMax + minMaxPos
 
 class ClosestDotSearchAgent(SearchAgent):
     "Search for all food using a sequence of searches"
@@ -529,7 +571,7 @@ class ClosestDotSearchAgent(SearchAgent):
         problem = AnyFoodSearchProblem(gameState)
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        return search.breadthFirstSearch(problem)
 
 class AnyFoodSearchProblem(PositionSearchProblem):
     """
@@ -565,7 +607,9 @@ class AnyFoodSearchProblem(PositionSearchProblem):
         x,y = state
 
         "*** YOUR CODE HERE ***"
-        util.raiseNotDefined()
+        if (food[x][y] == True):
+            return True
+        return False
 
 def mazeDistance(point1, point2, gameState):
     """
