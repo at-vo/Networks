@@ -62,6 +62,6 @@ for i in container:
     pX = i[3]
     pY = i[4]
     n = i[5]
-    # print(">> solve({},{},{},{},{},{})\\\\".format(p,A,B,pX,pY,n))
-    # print(solve(p,A,B,pX,pY,n))
-    print(p,A,B,pX,pY,n)
+    print(">> solve({},{},{},{},{},{})\\\\".format(p,A,B,pX,pY,n))
+    print(solve(p,A,B,pX,pY,n))
+    #print(p,A,B,pX,pY,n)
