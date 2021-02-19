@@ -1,51 +1,109 @@
 '''
         DAT VO
         250983323
-        CS 4442
+        CS 4442 ASN 1
         BOYU WANG
 '''
 
 import matplotlib.pyplot as plt
 import numpy as np
-from numpy.lib.shape_base import column_stack
 import pandas as pd
 
+degreeList = ["Linear", "2nd Order", "3rd Order", "4th Order"]
+
 def readfile(predict,expect):
-    dataX = []
-    dataY = []
-    xfile = open(predict,"r")
-    yfile = open(expect,"r")
-        
-    for xread in xfile:
-        yread = yfile.readline()
-        dataX.append(float(xread.strip('\n'))) 
-        dataY.append(float(yread.strip('\n')))
+    xdata = np.fromfile(predict, sep=" ")
+    ydata = np.fromfile(expect, sep=" ")
 
-    xfile.close()
-    yfile.close()
+    # sort data
+    ydata = ydata[np.argsort(xdata)]
+    xdata = np.sort(xdata)
 
-    return dataX, dataY
+    return xdata, ydata
 
-def hypothesis(x,theta):
-    y1 = theta*x
-    return np.sum(y1, axis=1)
 
-def error(x,y,theta,m):
-    y1 = hypothesis(x, theta)
-    return sum(np.sqrt((y1-y)**2))/(2*m)
+def hypothesis(w,x):
+    return w.T @ x
 
-def gradient(x, y, theta, alpha, epoch,m):
-    J=[]
-    k=0
-    while k < epoch:
-        y1 = hypothesis(x, theta)
-        for c in range(0, len(x.columns)):
-            theta[c] = theta[c] - alpha*sum((y1-y)* x.iloc[:, c])/m
-        j = error(x, y, theta,m)
-        J.append(j)
-        k += 1
-    return J, theta
+def errorfn(y):
+    return lambda y1: np.sum(pow((y1 - y),2))/len(y)
 
+def gradient(y):
+    return lambda x: np.linalg.inv(x.T @ x) @ x.T @ y
+
+
+def regression(xtrData,ytrData,xteData,yteData,degree=1):
+
+    # create training dataFrame
+    trdataobject = {'x':xtrData,'y':ytrData}
+    trData = pd.DataFrame(trdataobject)
+    trData = pd.concat([pd.Series(1., index=trData.index, name='bias'), trData], axis=1)
+    ytr = trData['y']
+    xtr = trData.drop(columns='y')
+
+
+    # create testing dataFrame
+    tedataobject = {'x':xteData,'y':yteData}
+    teData = pd.DataFrame(tedataobject)
+    teData = pd.concat([pd.Series(1., index=teData.index, name='bias'), teData], axis=1)
+    yte = teData['y']
+    xte = teData.drop(columns='y')
+
+    if degree > 1:
+        exp = 2
+        # add the next exponents 
+        while exp <= degree:
+            xte[exp] = xte['x']**exp
+            xtr[exp] = xtr['x']**exp
+            exp+=1
+
+    # convert to numpy
+    xte = xte.to_numpy()
+    xtr = xtr.to_numpy()
+    yte = yte.to_numpy()
+    ytr = ytr.to_numpy()
+    
+    # gradient function on y training 
+    wTr = gradient(ytr)
+    # weights on x training 
+    weights = wTr(xtr)
+
+    # compute y1 values for weights
+    y1Tr = [hypothesis(weights,x) for x in xtr]
+    y1Te = [hypothesis(weights,x) for x in xte]
+
+    # error functions
+    errTrfn = errorfn(ytr)
+    errTefn = errorfn(yte)
+
+    # compute training errors 
+    errTr = errTrfn(y1Tr)
+    errTe = errTefn(y1Te)
+
+    # graph training 
+    fig,axs = plt.subplots(2)
+    fig.tight_layout()
+    axs[0].scatter(xtrData, ytrData)
+    axs[0].set_title(degreeList[degree - 1] + " Regression vs Training Data")
+    axs[0].plot(xtrData, y1Tr,color="yellow")
+
+    # graph testing
+    axs[1].scatter(xteData, yteData)
+    axs[1].set_title(degreeList[degree - 1] + " Regression vs Test Data")
+    axs[1].plot(xteData, y1Te,color="yellow")
+    plt.show()
+
+    # report average error
+    print("\nRegression Model: ", degreeList[degree-1])
+    print("Average error of Training: ", errTr)
+    print("Average error of Testing: ", errTe)
+
+    # return dict of values
+    return {"ws": weights, "y1tr": y1Tr, "y1te": y1Te, "errTr": errTr, "errTe": errTe}
+
+def kfold():
+    
+    return
 
 def main():
     # PATH variables for data
@@ -58,22 +116,24 @@ def main():
     xtrData, ytrData = readfile(pathXTR,pathYTR)
     xteData, yteData = readfile(pathXTE,pathYTE)
 
-    data = {'bias':[1. for i in range(len(xtrData))],'x':xtrData,'y':ytrData}
-    trData = pd.DataFrame(data)
-    y = trData['y']
-    x = trData.drop(columns='y')
+    #Plot the original training and test data
+    fig,axs = plt.subplots(2)
+    fig.tight_layout()
+    axs[0].scatter(xtrData, ytrData)
+    axs[0].set_title("Training Data")
 
-    x['x^2'] = x['x']**2
-    x['x^3'] = x['x']**3
-    print(x.head())
+    axs[1].scatter(xteData, yteData)
+    axs[1].set_title("Test Data")
+    plt.show()
+
+    regressions = [regression(xtrData, ytrData, xteData, yteData, i) for i in range(1,5)]
 
 
+    return 0
 
-    # fig, axs = plt.subplots(2)
-    # fig.suptitle("TR AND TE DATA")
-    # axs[0].scatter(xtrData, ytrData,None,"red")
-    # axs[1].scatter(xteData, yteData)
-    # plt.show()
+    
+
+
 
 if __name__ == '__main__':
     main()
