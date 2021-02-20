@@ -121,12 +121,12 @@ def k_fold_cross_validation(k, order, training_x, training_y, lambda_const = [0]
     
 #This function servers to load data from a file into a sorted np array
 def load_data():
-    test_x = np.fromfile("data/hw1xte.dat", sep=" ")
-    test_y = np.fromfile("data/hw1yte.dat", sep=" ")
+    test_x = np.fromfile("hw1xte.dat", sep=" ")
+    test_y = np.fromfile("hw1yte.dat", sep=" ")
 
     #Load training data for plot
-    training_x = np.fromfile("data/hw1xtr.dat", sep=" ")
-    training_y = np.fromfile("data/hw1ytr.dat", sep=" ")
+    training_x = np.fromfile("hw1xtr.dat", sep=" ")
+    training_y = np.fromfile("hw1ytr.dat", sep=" ")
 
     #Sort the data into increasing x order
     training_y = training_y[np.argsort(training_x)]
@@ -142,17 +142,17 @@ def main():
     training_x, training_y, test_x, test_y = load_data()
     lambda_const = [0.01, 0.1, 1, 10, 100, 1000, 10000]
 
-    #Plot the original training and test data
-    add_plot(training_x, training_y)
-    plt.title("Training Data")
-    plt.show()
+    # #Plot the original training and test data
+    # add_plot(training_x, training_y)
+    # plt.title("Training Data")
+    # plt.show()
 
-    add_plot(test_x, test_y, "^")
-    plt.title("Test Data")
-    plt.show()
+    # add_plot(test_x, test_y, "^")
+    # plt.title("Test Data")
+    # plt.show()
 
     #Compute the regressions for 1, 2, 3, 4 -> Linear to 4th Order polynomial 
-    regression_set = [regression(training_x, training_y, test_x, test_y, order,False) for order in range(1, 5)]
+    regression_set = [regression(training_x, training_y, test_x, test_y, order,0,False) for order in range(1, 5)]
     #Pull out all the testing set errors from the computed regressions
     errors = [err["te_err"] for err in regression_set]
     
@@ -170,7 +170,7 @@ def main():
     print("Best lambda (Q3 A): ", lambda_const[lm_reg_errors_te.index(min(lm_reg_errors_te))])
 
     #Plot Training/Testing errors vs Lambda Constant
-    plt.plot(lambda_const,lm_reg_errors_tr, label="Training Error")
+    plt.plot(lambda_const, lm_reg_errors_tr, label="Training Error")
     plt.plot(lambda_const, lm_reg_errors_te, label="Test Error")
     plt.xscale("log")
     plt.title("Errors vs Lambda")
@@ -204,6 +204,8 @@ def main():
     #Plot the test data and the regression line
     add_plot(test_x, test_y)
     plt.plot(test_x, best_fit["te_y"])
+    print(test_x)
+    print(best_fit["te_y"])
     plt.title("Best Fit Cross Validation vs Testing Data")
     plt.show()
  
