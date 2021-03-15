@@ -4,13 +4,13 @@
 		ADR r1, STRING1;load test case
 		ADR r2, STRING2;load empty string
 		
-	;checks each word in string1 char by char till "the" is found	
-check 	LDRB r4, [r1]; load first char in string1 of current word
-		cmp r4, #'t' ; check for t in string1		
-		LDRBEQ r4, [r1, #1]; load next char in string1 only if t is first char in the current word 
-		cmpeq r4, #'h';	 check for h in	string1	
-		LDRBEQ r4, [r1, #2]; load next char in string1 only if h is second char in the current word
-		cmpeq r4, #'e';	 check for e in string1		
+													;checks each word in string1 char by char till "the" is found	
+check 	LDRB r4, [r1]								; load first char in string1 of current word
+		cmp r4, #'t' 								; check for t in string1		
+		LDRBEQ r4, [r1, #1]							; load next char in string1 only if t is first char in the current word 
+		cmpeq r4, #'h'								;	 check for h in	string1	
+		LDRBEQ r4, [r1, #2]							; load next char in string1 only if h is second char in the current word
+		cmpeq r4, #'e'								;	 check for e in string1		
 		
 		beq checkSoN; if all cases are true check last char if its a space or null
 		bne store; if not store the word in new string
