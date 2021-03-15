@@ -18,7 +18,7 @@ pathXTE = "hw1xte.dat"
 pathYTE = "hw1yte.dat"
 
 # Str list for printing order of a function
-degreeList = ["Linear", "2nd Order", "3rd Order", "4th Order"]
+degreeList = ["Linear", "Second Order", "Third Order", "Fourth Order"]
 
 def readfile(predict:str, expect:str):
     xdata = np.fromfile(predict, sep=" ")
@@ -88,6 +88,7 @@ def regression(xtrData, ytrData, xteData, yteData, degree = 1, lm = 0, graph = T
 
     # calculate weights on x training 
     weights = wTr(xtr)
+    #print(weights)
 
     # compute y1 values for weights
     y1Tr = [hypothesis(weights, x) for x in xtr]
@@ -124,8 +125,17 @@ def regression(xtrData, ytrData, xteData, yteData, degree = 1, lm = 0, graph = T
 def kfold(xtrData, ytrData, folds, degree, lambdalist = [0]):
     # shuffle the data randomly
     xPerm = np.random.permutation(xtrData)
-    reorder = [np.where(xPerm[data] == xtrData)[0][0] for data in range(len(xPerm))]
+    reorder = [np.where(data == xtrData)[0][0] for data in xPerm]
 
+    # print("\n\n\n\ntraining X",xtrData)
+    # for data in range(len(xPerm)):
+    #     temp = np.where(xPerm[data] == xtrData)
+    #     print("value in permutation:",xPerm[data])
+    #     print("index in training: ",temp)
+    print(xtrData)
+    print(type(xtrData))
+    print(reorder)
+    print(xtrData[reorder])
     # split the data in k folds
     xSplit = np.split(xtrData[reorder], folds)
     ySplit = np.split(ytrData[reorder], folds)
@@ -177,30 +187,32 @@ def main():
     xtrData, ytrData = readfile(pathXTR,pathYTR)
     xteData, yteData = readfile(pathXTE,pathYTE)
 
-    # Plot training and test data
-    fig,axs = plt.subplots(2)
-    fig.tight_layout()
-    axs[0].scatter(xtrData, ytrData)
-    axs[0].set_title("Training Data")
-    axs[1].scatter(xteData, yteData)
-    axs[1].set_title("Test Data")
-    plt.show()
+    # # Plot training and test data
+    # fig,axs = plt.subplots(2)
+    # fig.tight_layout()
+    # axs[0].scatter(xtrData, ytrData)
+    # axs[0].set_title("Training Data")
+    # axs[1].scatter(xteData, yteData)
+    # axs[1].set_title("Test Data")
+    # plt.show()
 
     # perform regressions for each order upto 4th
-    regressions = [regression(xtrData, ytrData, xteData, yteData, deg, 0, True) for deg in range(1, 5)]
+    regressions = [regression(xtrData, ytrData, xteData, yteData, deg, 0, False) for deg in range(1, 5)]
+    # for x in regressions:
+    #     print(x["ws"])
 
-    # Check Training Errors
-    minTrainStr = testError(regressions,"Training")
-    minTestStr = testError(regressions,"Testing")
+    # # Check Training Errors
+    # minTrainStr = testError(regressions,"Training")
+    # minTestStr = testError(regressions,"Testing")
 
-    # Compare Training and Test errors
-    print("\n2D:")
-    if minTrainStr == minTestStr:
-        print("{} is the best for fitting data".format(minTestStr))
-    else:
-        print("Hard to tell which order is the best since training and test errors do not correlate")
+    # # Compare Training and Test errors
+    # print("\n2D:")
+    # if minTrainStr == minTestStr:
+    #     print("{} is the best for fitting data".format(minTestStr))
+    # else:
+    #     print("Hard to tell which order is the best since training and test errors do not correlate")
 
-    print("\n3A")
+    # print("\n3A")
 
     # Perform Regularization
     lambdaList = [0.01,0.1,1,10,100,1000,10000]
@@ -214,61 +226,63 @@ def main():
     trLambda = lambdaList[lambdaErrorTr.index(min(lambdaErrorTr))]
     teLambda = lambdaList[lambdaErrorTe.index(min(lambdaErrorTe))]
 
-    # compare lambda errors
-    if trLambda == teLambda:
-        bestLambda3C = trLambda
-        print("training and test error correlate, Best lambda is ", bestLambda3C)
-    else:
-        print("Best training lambda: ", trLambda)
-        print("Best test lambda: ", teLambda)
+    # # compare lambda errors
+    # if trLambda == teLambda:
+    #     bestLambda3C = trLambda
+    #     print("training and test error correlate, Best lambda is ", bestLambda3C)
+    # else:
+    #     print("Best training lambda: ", trLambda)
+    #     print("Best test lambda: ", teLambda)
 
 
-    # plot training and testing errors as a function of lambda
-    plt.plot(lambdaList, lambdaErrorTr, label="Training")
-    plt.plot(lambdaList, lambdaErrorTe, label="Test")
-    plt.xscale("log")
-    plt.title("Errors as a function of lambda")
-    plt.xlabel("lambda")
-    plt.ylabel("Errors")
-    plt.legend()
-    plt.show()
+    # # plot training and testing errors as a function of lambda
+    # plt.plot(lambdaList, lambdaErrorTr, label="Training")
+    # plt.plot(lambdaList, lambdaErrorTe, label="Test")
+    # plt.xscale("log")
+    # plt.title("Errors as a function of lambda")
+    # plt.xlabel("lambda")
+    # plt.ylabel("Errors")
+    # for i,j in zip(lambdaList,lambdaErrorTr):
+    #     plt.annotate(str(j),xy=(i,j))
+    # plt.legend()
+    # plt.show()
 
     # Transpose matrix of Ws to size of lambdalist
     wReg = np.array([i["ws"].tolist() for i in regularizations]).T.tolist()
     
-    # plot weights as a function of lambda
-    for i in range(len(wReg)):    
-        plt.plot(lambdaList, wReg[i], label = "w" + str(i))
-    plt.title("Weights vs Lambda")
-    plt.xscale("log")
-    plt.xlabel("lambda")
-    plt.ylabel("weight")
-    plt.legend()    
-    plt.show()
+    # # plot weights as a function of lambda
+    # for i in range(len(wReg)):    
+    #     plt.plot(lambdaList, wReg[i], label = "w" + str(i))
+    # plt.title("Weights vs Lambda")
+    # plt.xscale("log")
+    # plt.xlabel("lambda")
+    # plt.ylabel("weight")
+    # plt.legend()    
+    # plt.show()
 
     k = 5
     # k-fold cross validation for avgError and lambdas
     avgError, bestLambda = kfold(xtrData, ytrData, k, 4, lambdaList)
 
-    print("\n4C")
-    print("Best lambda is ", bestLambda)
-    if bestLambda == bestLambda3C:
-        print("Best lambda same as in 3C")
+    # print("\n4C")
+    # print("Best lambda is ", bestLambda)
+    # if bestLambda == bestLambda3C:
+    #     print("Best lambda same as in 3C")
 
     # compute line of best fit based on best lambda
     lobf = regression(xtrData, ytrData, xteData, yteData, 4, bestLambda, False)
 
-    # Plot Cross Validations
-    fig, axs = plt.subplots(2)
-    fig.tight_layout()
-    axs[0].plot(lambdaList, avgError)
-    axs[0].set_title("Cross Validation on lambda")
-    axs[0].set_xscale("log")
+    # # Plot Cross Validations
+    # fig, axs = plt.subplots(2)
+    # fig.tight_layout()
+    # axs[0].plot(lambdaList, avgError)
+    # axs[0].set_title("Cross Validation on lambda")
+    # axs[0].set_xscale("log")
 
-    axs[1].scatter(xteData, yteData)
-    axs[1].plot(xteData, lobf["y1te"], "orange")
-    plt.title("Cross Validation on training data")
-    plt.show()
+    # axs[1].scatter(xteData, yteData)
+    # axs[1].plot(xteData, lobf["y1te"], "orange")
+    # plt.title("Cross Validation on training data")
+    # plt.show()
 
     return 0
 
